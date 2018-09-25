@@ -1,23 +1,79 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { View, Image, Text } from 'react-native';
+import { Header, Button } from 'react-native-elements'
+import { createStackNavigator } from 'react-navigation';
+import { MapView } from "expo";
 
-export default class App extends React.Component {
+class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Home'
+  };
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Home Screen</Text>
+        <Button 
+          title="Go to Map"
+          onPress={() => this.props.navigation.navigate('Map', {
+            userName: 'Benjamin Beyt'
+          })}
+        />
+      </View>
+    )
+  }
+}
+
+class MapScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Welcome, ' + navigation.getParam('userName', 'Guest') + '!'
+    };
+  };
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <MapView
+          style={{
+            flex: 1
+          }}
+          initialRegion={{
+            latitude: 29.461144,
+            longitude: -98.483166,
+            latitudeDelta: 0.0102,
+            longitudeDelta: 0.0086
+          }}
+        />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const RootStack = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen
+    },
+    Map: {
+      screen: MapScreen
+    }
   },
-});
+  {
+    initialRouteName: 'Home',
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#800000'
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }
+  }
+);
+
+export default class App extends Component {
+  render() {
+    return <RootStack />;
+  }
+}
+
