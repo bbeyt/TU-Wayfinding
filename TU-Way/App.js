@@ -3,7 +3,6 @@ import { createStackNavigator } from 'react-navigation';
 import LoginScreen from './LoginScreen';
 import MapScreen from './MapScreen';
 
-
 const RootStack = createStackNavigator(
   {
     Login: {
