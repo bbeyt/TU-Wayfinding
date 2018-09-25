@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
-import { Header, Button } from 'react-native-elements'
+import { View, Image, Text, Button } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { MapView } from "expo";
 
