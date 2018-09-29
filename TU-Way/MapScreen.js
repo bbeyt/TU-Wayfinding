@@ -14,7 +14,7 @@ export default class MapScreen extends Component {
                             color: '#fff',
                     }}
                     backgroundColor='transparent'
-                    onPress={() => alert("Menu button pressed.")}
+                    onPress={() => navigation.goBack()}
                 />
             )
         };
