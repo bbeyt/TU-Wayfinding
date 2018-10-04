@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#C7C1C1',
 		borderRadius: 50,
-		width: 250,
+		width: 75,
 		flexDirection: 'row',
 		justifyContent: !this.state.active ? 'flex-start':'flex-end'
 	},
 	toggle: {
-		height: 60,
-		width: 125,
+		height: 35,
+		width: 50,
 		backgroundColor: this.state.active ? '#55acee' : '#CB6161',
 		borderRadius: 50,
 		alignItems: 'center',

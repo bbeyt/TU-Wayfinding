@@ -1,74 +1,65 @@
 import React, { Component } from 'react';
-import { createStackNavigator, View } from 'react-navigation';
+import { createDrawerNavigator, DrawerItems /*createStackNavigator,*/ } from 'react-navigation';
+import { StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import LoginScreen from './src/components/LoginScreen';
 import MapScreen from './src/components/MapScreen';
 import SettingsScreen from './src/components/SettingsScreen';
 
-const RootStack = createStackNavigator(
-  {
-    Login: { screen: LoginScreen },
-    Map: { screen: MapScreen },
-    Settings: { screen: SettingsScreen }
-  },
-  {
-    initialRouteName: 'Settings',
-    navigationOptions: {
-        headerStyle: {
-        backgroundColor: '#800000'
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold'
-      }
-    }
-  }
-);
+const {width} = Dimensions.get("window");
 
-export default class App extends Component {
-  render() {
-    return <RootStack />;
+export default class App extends Component{
+render() {
+  return (
+      <AppDrawerNavigator />
+    );
   }
 }
 
-//AppRegistry.registerComponent('TU-Way', () => App);
+const CustomDrawerComponent = (props) => (
+    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
+      <Image source={require('./assets/trinityEmblem.png')} style={{height: 120, width: 120, borderRadius: 60}} />
+    </View>
+      <ScrollView>
+        <DrawerItems {...props} />
+      </ScrollView>
+    </SafeAreaView>
+  )
 
-
-
-
-
-/*import React, { Component } from 'react';
-import { createStackNavigator, View, AppRegistry } from 'react-navigation';
-import LoginScreen from './src/components/LoginScreen';
-import MapScreen from './src/components/MapScreen';
-import SettingsScreen from './src/components/SettingsScreen';
-import Header from './src/components/Header';
-
-const RootStack = createStackNavigator(
-    {
-    Login: { screen: LoginScreen },
-    Map: { screen: MapScreen },
-    Settings: { screen: SettingsScreen },
-    },
-    {
-      headerMode: 'none',
-      mode: 'modal',
-      initialRouteName:'Login',
+const AppDrawerNavigator = createDrawerNavigator({
+  Map:MapScreen,
+  Settings:SettingsScreen
+}, {
+    contentComponent: CustomDrawerComponent,
+    drawerWidth: width,
+    contentOptions: {
+      activeTintColor: 'maroon'
     }
+})
 
-     
-     
-export default class App extends React.Component {  
-  render() {
-    //when header is rendered, it is passed a prop of headerText
-    return ( 
-      <View style={{ flex: 1 }}>
-        <Header headerText={'Login'} />
-        return <RootStack />;
-      </View>
-      );
-    }
- }   
+// const RootStack = createStackNavigator(
+//   {
+//     Login: { screen: LoginScreen },
+//     Map: { screen: MapScreen },
+//     Settings: { screen: SettingsScreen }
+//   },
+//   {
+//     initialRouteName: 'Map',
+//     navigationOptions: {
+//         headerStyle: {
+//         backgroundColor: '#800000'
+//       },
+//       headerTintColor: '#fff',
+//       headerTitleStyle: {
+//         fontWeight: 'bold'
+//       }
+//     }
+//   }
+// );
 
-AppRegistry.registerComponent('TU-Way', () => App);
 
-*/
+// export default class App extends Component {
+//   render() {
+//     return <RootStack />;
+//   }
+// }
