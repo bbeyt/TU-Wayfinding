@@ -23,6 +23,7 @@
     "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
+    "react-native-checkbox": "^2.0.0",
     "react-native-elements": "^0.19.1",
     "react-navigation": "^2.16.0"
   },

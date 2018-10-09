@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createDrawerNavigator, DrawerItems /*createStackNavigator,*/ } from 'react-navigation';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation';
 import { StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import LoginScreen from './src/components/LoginScreen';
 import MapScreen from './src/components/MapScreen';
@@ -36,30 +36,3 @@ const AppDrawerNavigator = createDrawerNavigator({
       activeTintColor: 'maroon'
     }
 })
-
-// const RootStack = createStackNavigator(
-//   {
-//     Login: { screen: LoginScreen },
-//     Map: { screen: MapScreen },
-//     Settings: { screen: SettingsScreen }
-//   },
-//   {
-//     initialRouteName: 'Map',
-//     navigationOptions: {
-//         headerStyle: {
-//         backgroundColor: '#800000'
-//       },
-//       headerTintColor: '#fff',
-//       headerTitleStyle: {
-//         fontWeight: 'bold'
-//       }
-//     }
-//   }
-// );
-
-
-// export default class App extends Component {
-//   render() {
-//     return <RootStack />;
-//   }
-// }
