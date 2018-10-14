@@ -5,6 +5,9 @@
     "version": "1.0.0",
     "slug": "tu-way",
     "sdkVersion": "27.0.0",
+    "androidStatusBar": {
+      "backgroundColor": "#800000"
+    },
     "ios": {
       "bundleIdentifier": "com.trinityseniorsoftware.tuway"
     },
