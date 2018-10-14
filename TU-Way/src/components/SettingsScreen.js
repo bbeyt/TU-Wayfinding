@@ -1,41 +1,36 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import SwitchButton from './SwitchButton';
-import { Font } from 'expo';
-import { Header, Left, Right, Icon} from 'native-base'
+import { Container, Header, Right, Body, Left, Icon } from 'native-base'
 
 export class SettingsScreen extends Component {
 
     static navigationOptions = {
-        drawerIcon : ({tintColor})=> (
-                <Icon name="settings" style={{fontSize: 24, color: tintColor}} />
+        drawerIcon: ({ tintColor }) => (
+            <Icon name="settings" style={{ fontSize: 24, color: tintColor }} />
         )
-    }
-
-    componentDidMount() {
-      Font.loadAsync({
-        'Roboto-Regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-      });
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <Header>
+            <Container>
+                <Header androidStatusBarColor={"#723130"} style={{backgroundColor: "#723130"}}>
                     <Left>
-                        <Icon name="menu" onPress={()=>
+                        <Icon name="menu" onPress={() =>
                             this.props.navigation.openDrawer()} />
                     </Left>
+                    <Body />
+                    <Right />
                 </Header>
                 <View style={styles.row}>
                     <Text style={styles.text}>Push Notifications</Text>
-                        <SwitchButton style={styles.button}/>
+                    <SwitchButton style={styles.button} />
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.text}>Cellular Data</Text>
-                        <SwitchButton />
+                    <SwitchButton />
                 </View>
-            </View>
+            </Container>
         );
     }
 }
@@ -53,12 +48,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'space-between',
     },
-    button: {
-
-    },
     text: {
         fontSize: 20,
-        color: '#800000'
+        color: '#723130'
     }
 });
 
