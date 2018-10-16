@@ -33,11 +33,10 @@ export default class MapScreen extends Component {
 
     render() {
         return (
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={74}>
-                
+            <KeyboardAvoidingView style={{ flex: 1 }}behavior="height" keyboardVerticalOffset={0} enabled>
                 <MapView
                     style={{
-                        flex: 1
+                        flex: 8
                     }}
                     initialRegion={{
                         latitude: 29.461144,
@@ -46,15 +45,10 @@ export default class MapScreen extends Component {
                         longitudeDelta: 0.0086
                     }}
                 />
+
+		<KeyboardAvoidingView style={{ flex: 1 }} behavior="height" keyboardVerticalOffset={0} enabled>
                 <SearchBar
-                    style={{
-                        //flex: 1,
-                        position: 'absolute',
-                        top: 50,
-                        bottom: 50,
-                        left: 0,
-                        //color: '#fff'
-                    }}
+                    style={styles.searchBar}
                     containerStyle={{ backgroundColor: 'white' }}
                     inputStyle={{ backgroundColor: 'white' }}
                     ref={search => this.search = search}
@@ -63,10 +57,11 @@ export default class MapScreen extends Component {
                     onChangeText={() => { }}
                     onClear={() => this.search.clear()}
                     placeholder='Type Here...'
-                //alignSelf= 'center'
-                //top: 35;
                 />
-                <FlatList
+		</KeyboardAvoidingView>
+
+		<KeyboardAvoidingView style={{ flex: 1 }} behavior="height" keyboardVerticalOffset={0} enabled >
+		<FlatList
 	                style={styles.container}
 	                horizontal= {true}
 	                data = {[{key:'Events'}, {key:'Classes'}, {key:'Buildings'},{key:'Offices'}]}
@@ -79,6 +74,7 @@ export default class MapScreen extends Component {
         		            <Text style= {styles.buttonText}>{item.key}</Text>	
 		                </TouchableOpacity>}
                     />
+		</KeyboardAvoidingView>
             </KeyboardAvoidingView>
         );
     }
@@ -86,20 +82,23 @@ export default class MapScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         paddingHorizontal: width/10,
-        padding:50
       },
       buttonText:{
         textAlign:'center',
         color: 'white',
-        fontSize:width/30
+        fontSize:width/30,
+	zIndex: 10,
       },
-    circle: {
+    circle: {	
         width: width/5,
         height: width/5,
         borderRadius: width/2,
         backgroundColor: 'maroon',
         justifyContent:'center',
+	zIndex: 10,
+    },
+    searchBar: {
+        position: 'absolute',
     }
 })
