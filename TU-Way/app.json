@@ -12,6 +12,7 @@
       "package": "com.trinityseniorsoftware.tuway",
       "config": {
         "googleMaps": { "apiKey": "AIzaSyDnqZyxvbMQ6S--ihoSAnMtm3CXEgIM9lQ" }
+        "proximityAPI" : { "apikey": "AIzaSyBVKKGQTaoroMlkz9NWl9vMup2lkCYR-G0" }
       }
     }
   }
