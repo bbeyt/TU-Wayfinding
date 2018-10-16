@@ -1,0 +1,44 @@
+
+{
+	"ContactsView": {
+		"title": "Contacts",
+		"data": [
+			{
+				"name": "Admissions Office",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{
+				"name": "Athletics Office",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{ 
+				"name": "Campus Police (Non-Emergency)",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{
+				"name": "Career Services",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{
+				"name": "Counseling Services",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{
+				"name": "Dean of Students Office",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			},
+			{
+				"name": "Financial Aid Office",
+				"Phone": "(800) 874-6489",
+				"Email": "admissions@trinity.edu"
+			}
+		]
+	}
+}
+
