@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Text, View, TextInput,
+  StyleSheet, Text, TextInput,
   ImageBackground, Image
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import CheckBox from 'react-native-checkbox';
+import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 
 export default class LoginScreen extends Component {
   static navigationOptions = {
-    title: 'Login'
-  };
+    drawerIcon: ({ tintColor }) => (
+        <Icon name="paper" style={{ fontSize: 24, color: tintColor }} />
+    )
+}
   render() {
     return (
-      <ImageBackground source={require('./assets/background.jpg')} style={styles.container}>
+
+      <Container>
+                <Header androidStatusBarColor={"#723130"} style={{backgroundColor: "#723130"}}>
+                    <Left>
+                        <Button transparent>
+                            <Icon name="menu" onPress={() =>
+                                this.props.navigation.openDrawer()} />
+                        </Button>
+                    </Left>
+                    <Body />
+                    <Right />
+                </Header>
+
+      <ImageBackground source={require('../../assets/background.jpg')} style={styles.container}>
 
         <Text numberOfLines={1} style={styles.welcomeTxt}>Enter your login credentials</Text>
 
-        <ImageBackground source={require('./assets/MaroonSquare.jpg')} style={styles.square}>
+        <ImageBackground source={require('../../assets/MaroonSquare.jpg')} style={styles.square}>
 
           <TextInput placeholder='Username'
             style={styles.textInput}
@@ -47,15 +62,18 @@ export default class LoginScreen extends Component {
 
         </ImageBackground>
 
-        <Image source={require('./assets/trinityEmblem.png')} style={styles.logo} />
+        <Image source={require('../../assets/trinityEmblem.png')} style={styles.logo} />
 
-        <Button title="Log In" buttonStyle={styles.loginBtn} onPress={() => this.props.navigation.navigate('Map', {
+        <Button style={styles.loginBtn} light><Text style={styles.buttonTxt}> Login </Text></Button>
+
+        {/*<Button title="Log In" buttonStyle={styles.loginBtn} onPress={() => this.props.navigation.navigate('Map', {
           userName: 'Benjamin Beyt'
         })} />
 
-        <Button title="Continue as Guest" buttonStyle={styles.guestBtn} onPress={() => this.props.navigation.navigate('Map')} />
+      <Button title="Continue as Guest" buttonStyle={styles.guestBtn} onPress={() => this.props.navigation.navigate('Map')} />*/}
 
       </ImageBackground >
+      </Container>
     );
   }
 }
@@ -70,11 +88,17 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     width: '90%',
   },
+  buttonTxt: {
+    fontSize: 25,
+    color: 'white',
+  },
   loginBtn: {
     margin: 5,
-    backgroundColor: 'rgb(128,0,0)',
-    width: 325,
+    backgroundColor: "#723130",
+    width: 200,
     alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   guestBtn: {
     margin: 5,
