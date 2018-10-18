@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
+import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
 import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
@@ -26,8 +26,9 @@ class MapScreen extends Component {
                     <Body />
                     <Right />
                 </Header>
-                <MapView
-                    style={{ flex: 5 }}
+                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
+		<MapView 
+                    style={{ flex: 1 }}
                     initialRegion={{
                         latitude: 29.461144,
                         longitude: -98.483166,
@@ -35,7 +36,8 @@ class MapScreen extends Component {
                         longitudeDelta: 0.0086
                     }}
                 />
-<KeyboardAvoidingView style={{ flex: 1 }} behavior="height" keyboardVerticalOffset={0} enabled>
+		</ScrollView>
+<KeyboardAvoidingView  behavior="height" keyboardVerticalOffset={0} enabled>
                 <SearchBar
                     style={styles.searchBar}
                     containerStyle={{ backgroundColor: 'white' }}
@@ -51,22 +53,38 @@ class MapScreen extends Component {
                 </KeyboardAvoidingView>
 		
 		//Circular buttons under search bar
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={0} enabled >
-                <FlatList
-                        style={styles.container}
-                        horizontal= {true}
-                        data = {[{key:'Events'}, {key:'Classes'}, {key:'Buildings'},{key:'Offices'}]}
-                        keyExtractor={(item, index) => item.key}
-                    renderItem={  ({item}) =>
+                <KeyboardAvoidingView style={styles.buttons} 
+			flexDirection={'row'} 
+			justifyContent = {'space-evenly'} 
+			alignItems={'center'}  
+			behavior="padding" 
+			keyboardVerticalOffset={0} enabled >
                                 <TouchableOpacity
                                         style={styles.circle}
-                            //onPress={() => this.props.navigation.navigate('List')}
+                            onPress={Keyboard.dismiss}// this.props.navigation.navigate('List')}
                             >
-                                    <Text style= {styles.buttonText}>{item.key}</Text>
-                                </TouchableOpacity>}
-                    />
+                                    <Text style= {styles.buttonText}>{"Events"}</Text>
+                                </TouchableOpacity>
+			<TouchableOpacity
+                                        style={styles.circle}
+                            onPress={Keyboard.dismiss} //onPress={() => this.props.navigation.navigate('List')}
+                            >
+                                    <Text style= {styles.buttonText}>{"Classes"}</Text>
+                                </TouchableOpacity>
+			<TouchableOpacity
+                                        style={styles.circle}
+                            onPress={Keyboard.dismiss}//onPress={() => this.props.navigation.navigate('List')}
+                            >
+                                    <Text style= {styles.buttonText}>{"Buildings"}</Text>
+                                </TouchableOpacity>
+			<TouchableOpacity
+                                        style={styles.circle}
+                            onPress={Keyboard.dismiss} //onPress={() => this.props.navigation.navigate('List')}
+                            >
+                                    <Text style= {styles.buttonText}>{"Offices"}</Text>
+                                </TouchableOpacity>
                 </KeyboardAvoidingView>
-
+		<KeyboardAvoidingView style={{flex:0.01}} behavior="height"/>
             </Container>
         );
     }
@@ -77,7 +95,6 @@ export default MapScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-	paddingHorizontal: width/10,
       },
       buttonText:{
         textAlign:'center',
@@ -86,10 +103,9 @@ const styles = StyleSheet.create({
         zIndex: 10,
       },
     circle: {
-	flex:1,
         width: width/5,
         height: width/5,
-        borderRadius: width/2,
+        borderRadius:width/10 ,
         backgroundColor: 'maroon',
         justifyContent:'center',
         zIndex: 10,
@@ -102,5 +118,8 @@ const styles = StyleSheet.create({
    	 width: "80%",
     	alignSelf: 'center',
     	backgroundColor: "#555"
+    },
+    buttons:{
+	paddingVertical: 10,
     }
 })
