@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Container, Header, Right, Body, Left, Icon, Title } from 'native-base';
 import contactList from '../lists.json';
 
 export default class ContactsScreen extends Component {
 	static navigationOptions = {
-//		title: contactList.ContactsView.title,
         drawerIcon: ({ tintColor }) => (
             <Icon name="contacts" style={{ fontSize: 24, color: tintColor }} />
         )
-//		headerLeft: <Button />
 	};
 
 	render() {
 		return (
-//			<FlatList style={styles.container}>
 			<Container>
 				<Header androidStatusBarColor={"#723130"} style={{backgroundColor: "#723130"}}>
 					<Left>
@@ -25,20 +22,17 @@ export default class ContactsScreen extends Component {
 					</Left>
 					<Body>
 						<Title>{contactList.ContactsView.title}</Title>
-					/>
-//					</Body>
+					</Body>
 					<Right />
 				</Header>
 				<FlatList
-					style={styles.container}
 					data={contactList.ContactsView.data}
 					keyExtractor={(item, index) => item.name}
-					renderItem={({item}) =>
-	//					<TouchableOpacity>
-
-	//					</TouchableOpacity>
-						<Text>{item.name}</Text>
-					}
+					renderItem={({item}) => (
+						<View style={styles.listItem}>
+							<Text style={styles.name}>{item.name}</Text>
+						</View>
+					)}
 				/>
 			</Container>
 		);
@@ -46,15 +40,27 @@ export default class ContactsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-	container: {
+	listItem: {
 		flex: 1,
-//		paddingTop: 15,
-		backgroundColor: '#fff',
+		borderWidth: 1,
+		borderColor: 'lightgrey',
+		backgroundColor: '#FFFFFF',
 	},
-	item: {
-
+	name: {
+		marginTop: 10,
+		marginBottom: 10,
+		textAlign: 'left',
+		color: 'black',
+		fontSize: 20,
+		paddingLeft: 10,
+		fontWeight: 'bold',
 	},
-	nav: {
-
+	phone: {
+		marginTop: 5,
+		marginBottom: 10,
+		textAlign: 'left',
+		color: 'black',
+		fontSize: 15,
+		paddingLeft: 10,
 	},
 });
