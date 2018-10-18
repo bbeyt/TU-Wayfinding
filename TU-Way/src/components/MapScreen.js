@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, KeyboardAvoidingView, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
+import { View, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
 import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
-import { Button, Icon,SearchBar } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 
 var {height, width} = Dimensions.get('window');
 
@@ -27,7 +27,7 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
                 <MapView
-                    style={{ flex: 1 }}
+                    style={{ flex: 5 }}
                     initialRegion={{
                         latitude: 29.461144,
                         longitude: -98.483166,
@@ -46,10 +46,12 @@ class MapScreen extends Component {
                     onChangeText={() => { }}
                     onClear={() => this.search.clear()}
                     placeholder='Type Here...'
+		    onSubmitEditing={Keyboard.dismiss}
                 />
                 </KeyboardAvoidingView>
-
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" keyboardVerticalOffset={0} enabled >
+		
+		//Circular buttons under search bar
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={0} enabled >
                 <FlatList
                         style={styles.container}
                         horizontal= {true}
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
       },
     circle: {
+	flex:1,
         width: width/5,
         height: width/5,
         borderRadius: width/2,
@@ -93,5 +96,11 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         position: 'absolute',
+    },
+    separator:{
+	height: 0.5,
+   	 width: "80%",
+    	alignSelf: 'center',
+    	backgroundColor: "#555"
     }
 })
