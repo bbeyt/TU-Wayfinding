@@ -6,7 +6,9 @@ import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 
 var {height, width} = Dimensions.get('window');
-
+const keys = ['key'];
+var classList = [{key: 'Principles of Computer Science II'}, {key: 'Low-Level Computing'}, {key: 'Discrete Structures'}, {key: 'Principles of Data Abstraction'}, {key: 'Principles of Functional Languages'}, {key: 'Principles of Algorithms'}, {key: 'Principles of Computer Design'}, {key: 'Software Engineering'}, {key: 'Operating Systems'}, {key: 'Web Application Design'}, {key: 'Senior Software Project'}, {key: 'Calculus III'}, {key: 'Engineering Analysis and Design II'}, {key: 'Graphics'}];
+var filteredTerms =[] ;	
 class MapScreen extends Component {
 
     static navigationOptions = {
@@ -14,7 +16,15 @@ class MapScreen extends Component {
             <Icon name="home" style={{ fontSize: 24, color: tintColor }} />
         )
     }
-    render() {
+    constructor(props) {
+        super(props);
+        this.state = {searchTerm: ''};
+    }
+    searchUpdated(term){
+	this.setState({searchTerm: term})
+    }
+   render() {
+  	const filteredTerms = classList.filter(createFilter(this.state.searchTerm, keys)) 
         return (
             <Container>
                 <Header androidStatusBarColor={"#723130"} style={{backgroundColor: "#723130"}}>
@@ -39,6 +49,7 @@ class MapScreen extends Component {
                 />
 		</ScrollView>
 <KeyboardAvoidingView  behavior="height" enabled>
+		var term= "";
                 <SearchBar
                     style={styles.searchBar}
                     containerStyle={{ backgroundColor: 'white' }}
@@ -46,11 +57,12 @@ class MapScreen extends Component {
                     ref={search => this.search = search}
                     clearIcon={{ color: 'red' }}
                     searchIcon={false} // You could have passed `null` too
-                    onChangeText={() => { }}
+                    onChangeText={(term) => {this.searchUpdated(term)}}
                     onClear={() => this.search.clear()}
                     placeholder='Type Here...'
 		    onSubmitEditing={Keyboard.dismiss}
-                />
+                >
+			</SearchBar>
                 </KeyboardAvoidingView>
 		
 		//Circular buttons under search bar
@@ -87,8 +99,7 @@ class MapScreen extends Component {
                 </KeyboardAvoidingView>
 		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
-		<FlatList data={[{key: 'Principles of Computer Science II'}, {key: 'Low-Level Computing'}, {key: 'Discrete Structures'}, {key: 'Principles of Data Abstraction'}, {key: 'Principles of Functional Languages'}, {key: 'Principles of Algorithms'}, {key: 'Principles of Computer Design'}, {key: 'Software Engineering'}, {key: 'Operating Systems'}, {key: 'Web Application Design'}, {key: 'Senior Software Project'}, {key: 'Calculus III'}, {key: 'Engineering Analysis and Design II'}, {key: 'Graphics'}]}
-		 renderItem = {({item}) => 
+		<FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}>
 			//onPress={() => this.props.navigation.navigate('List')}>
         		<Text style= {styles.listText}>{item.key}</Text>	
