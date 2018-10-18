@@ -5,10 +5,18 @@ import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 
+//Get height and width of screen
 var {height, width} = Dimensions.get('window');
+
+//Get name of key for list of data
 const keys = ['key'];
+
+//Random list of classes for prototype
 var classList = [{key: 'Principles of Computer Science II'}, {key: 'Low-Level Computing'}, {key: 'Discrete Structures'}, {key: 'Principles of Data Abstraction'}, {key: 'Principles of Functional Languages'}, {key: 'Principles of Algorithms'}, {key: 'Principles of Computer Design'}, {key: 'Software Engineering'}, {key: 'Operating Systems'}, {key: 'Web Application Design'}, {key: 'Senior Software Project'}, {key: 'Calculus III'}, {key: 'Engineering Analysis and Design II'}, {key: 'Graphics'}];
+
+//List of classes that have been filtered by current search criteria
 var filteredTerms =[] ;	
+
 class MapScreen extends Component {
 
     static navigationOptions = {
@@ -16,14 +24,21 @@ class MapScreen extends Component {
             <Icon name="home" style={{ fontSize: 24, color: tintColor }} />
         )
     }
+
+    //Constructor to start search term as empty string
     constructor(props) {
         super(props);
         this.state = {searchTerm: ''};
     }
+
+    //updates searchTerm to the current search criteria
     searchUpdated(term){
 	this.setState({searchTerm: term})
     }
+
    render() {
+
+	//creates a filter to filter through classes
   	const filteredTerms = classList.filter(createFilter(this.state.searchTerm, keys)) 
         return (
             <Container>
@@ -37,6 +52,8 @@ class MapScreen extends Component {
                     <Body />
                     <Right />
                 </Header>
+
+		//ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
                     style={{ flex: 1 }}
@@ -48,7 +65,9 @@ class MapScreen extends Component {
                     }}
                 />
 		</ScrollView>
-<KeyboardAvoidingView  behavior="height" enabled>
+
+    //View encasing SearchBar
+    <KeyboardAvoidingView  behavior="height" enabled>
 		var term= "";
                 <SearchBar
                     style={styles.searchBar}
@@ -65,8 +84,8 @@ class MapScreen extends Component {
 			</SearchBar>
                 </KeyboardAvoidingView>
 		
-		//Circular buttons under search bar
-                <KeyboardAvoidingView style={styles.buttons} 
+	//Circular buttons under search bar
+	<KeyboardAvoidingView style={styles.buttons} 
 			flexDirection={'row'} 
 			justifyContent = {'space-evenly'} 
 			alignItems={'center'}  
@@ -74,37 +93,42 @@ class MapScreen extends Component {
 			enabled >
                                 <TouchableOpacity
                                         style={styles.circle}
-                            onPress={Keyboard.dismiss}// this.props.navigation.navigate('List')}
+                            onPress={Keyboard.dismiss}
                             >
                                     <Text style= {styles.buttonText}>{"Events"}</Text>
                                 </TouchableOpacity>
 			<TouchableOpacity
                                         style={styles.circle}
-                            onPress={Keyboard.dismiss} //onPress={() => this.props.navigation.navigate('List')}
+                            onPress={Keyboard.dismiss}
                             >
                                     <Text style= {styles.buttonText}>{"Classes"}</Text>
                                 </TouchableOpacity>
 			<TouchableOpacity
                                         style={styles.circle}
-                            onPress={Keyboard.dismiss}//onPress={() => this.props.navigation.navigate('List')}
+                            onPress={Keyboard.dismiss}
                             >
                                     <Text style= {styles.buttonText}>{"Buildings"}</Text>
                                 </TouchableOpacity>
 			<TouchableOpacity
                                         style={styles.circle}
-                            onPress={Keyboard.dismiss} //onPress={() => this.props.navigation.navigate('List')}
+                            onPress={Keyboard.dismiss}
                             >
                                     <Text style= {styles.buttonText}>{"Offices"}</Text>
                                 </TouchableOpacity>
                 </KeyboardAvoidingView>
+
+		//Adds extra spacing below buttons to appear more comfortable
 		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
+
+		//Flatlist of classList, filters when you begin typing
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
-		<FlatList data= {filteredTerms} renderItem = {({item}) => 
-			<TouchableOpacity style= {styles.buttonList}>
-			//onPress={() => this.props.navigation.navigate('List')}>
-        		<Text style= {styles.listText}>{item.key}</Text>	
-		</TouchableOpacity>}
-			/>
+		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
+			<TouchableOpacity style= {styles.buttonList}
+			    onPress={() =>Keyboard.dismiss}>
+        		    <Text style= {styles.listText}>{item.key}</Text>	
+			</TouchableOpacity>
+			}
+		    />
 		</KeyboardAvoidingView>
             </Container>
         );
