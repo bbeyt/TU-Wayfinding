@@ -3,6 +3,7 @@ import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard
 import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 
 var {height, width} = Dimensions.get('window');
 
@@ -37,7 +38,7 @@ class MapScreen extends Component {
                     }}
                 />
 		</ScrollView>
-<KeyboardAvoidingView  behavior="height" keyboardVerticalOffset={0} enabled>
+<KeyboardAvoidingView  behavior="height" enabled>
                 <SearchBar
                     style={styles.searchBar}
                     containerStyle={{ backgroundColor: 'white' }}
@@ -58,7 +59,7 @@ class MapScreen extends Component {
 			justifyContent = {'space-evenly'} 
 			alignItems={'center'}  
 			behavior="padding" 
-			keyboardVerticalOffset={0} enabled >
+			enabled >
                                 <TouchableOpacity
                                         style={styles.circle}
                             onPress={Keyboard.dismiss}// this.props.navigation.navigate('List')}
@@ -84,7 +85,16 @@ class MapScreen extends Component {
                                     <Text style= {styles.buttonText}>{"Offices"}</Text>
                                 </TouchableOpacity>
                 </KeyboardAvoidingView>
-		<KeyboardAvoidingView style={{flex:0.01}} behavior="height"/>
+		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
+		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
+		<FlatList data={[{key: 'Principles of Computer Science II'}, {key: 'Low-Level Computing'}, {key: 'Discrete Structures'}, {key: 'Principles of Data Abstraction'}, {key: 'Principles of Functional Languages'}, {key: 'Principles of Algorithms'}, {key: 'Principles of Computer Design'}, {key: 'Software Engineering'}, {key: 'Operating Systems'}, {key: 'Web Application Design'}, {key: 'Senior Software Project'}, {key: 'Calculus III'}, {key: 'Engineering Analysis and Design II'}, {key: 'Graphics'}]}
+		 renderItem = {({item}) => 
+			<TouchableOpacity style= {styles.buttonList}>
+			//onPress={() => this.props.navigation.navigate('List')}>
+        		<Text style= {styles.listText}>{item.key}</Text>	
+		</TouchableOpacity>}
+			/>
+		</KeyboardAvoidingView>
             </Container>
         );
     }
@@ -99,6 +109,17 @@ const styles = StyleSheet.create({
       buttonText:{
         textAlign:'center',
         color: 'white',
+        fontSize:width/30,
+        zIndex: 10,
+      },
+      buttonList:{
+	borderWidth: 1,
+	padding: 10,
+	borderColor: 'black'
+      },
+      listText:{
+        textAlign:'left',
+        color: 'black',
         fontSize:width/30,
         zIndex: 10,
       },
