@@ -4,6 +4,7 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
+import Geolocation from './Geolocation';
 
 //Get height and width of screen
 var {height, width} = Dimensions.get('window');
@@ -55,7 +56,8 @@ class MapScreen extends Component {
 
 		//ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
-		<MapView 
+        <MapView 
+                    
                     style={{ flex: 1 }}
                     initialRegion={{
                         latitude: 29.461144,
