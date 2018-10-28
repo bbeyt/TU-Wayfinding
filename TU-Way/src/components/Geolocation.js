@@ -1,73 +1,47 @@
-import React, { Component } from "react";
-import { AppRegistry, StyleSheet, Dimensions, View } from "react-native";
+import React, { Component } from 'react';
+import { Constants, Location, Permissions } from 'expo';
 import MapView from "react-native-maps"
 
+export default class App extends Component {
+  state = {
+    location: { coords: {latitude: 0, longitude: 0}},
+  };
 
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      latitude: null,
-      longitude: null,
-      error:null,
-    };
+  componentWillMount() {
+      this._getLocationAsync();
+    
   }
 
-  componentDidMount() {
-    navigator.geolocation.watchPosition(
-       (position) => {
-         this.setState({
-           latitude: position.coords.latitude,
-           longitude: position.coords.longitude,
 
-         });
-       },
-       (error) => this.setState({ error: error.message }),
-       /*enableHighAccuracy - false: uses wifi; True: uses gps;*/
-       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
-     );
-   }
-
-
-   componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchId);
+  async _getLocationAsync() {
+    const {status} = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+    Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}, this.locationChanged);
   }
-
+  
+  locationChanged = (location) => {
+    region = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.05,
+    },
+    this.setState({location, region})
+  }
 
   render() {
     return (
-      <View style= {styles.container}>
-      {/*followUserLocation ={true}*/}
-      {!!this.state.latitude && !!this.state.longitude && <MapView.Marker
-         coordinate={{
-          "latitude":this.state.latitude,
-          "longitude":this.state.longitude}}
-       />}
-      </View>
+        <MapView
+          style={{ flex: 1 }}
+          showsUserLocation={true}
+          region={this.state.region}
+        />
     );
-
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-});
-
-export default App;
+Expo.registerRootComponent(App);

@@ -4,7 +4,6 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
-import Geolocation from './Geolocation';
 
 //Get height and width of screen
 var {height, width} = Dimensions.get('window');
