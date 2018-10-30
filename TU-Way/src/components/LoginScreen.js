@@ -3,8 +3,12 @@ import {
   StyleSheet, Text, TextInput,
   ImageBackground, Image
 } from 'react-native';
-import CheckBox from 'react-native-checkbox';
-import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
+//import CheckBox from 'react-native-checkbox';
+import { Container, Header, Right, Body, Left, Button, Icon} from 'native-base';
+import {ListItem,CheckBox} from 'react-native-elements';
+
+
+
 
 export default class LoginScreen extends Component {
   static navigationOptions = {
@@ -12,6 +16,10 @@ export default class LoginScreen extends Component {
         <Icon name="paper" style={{ fontSize: 24, color: tintColor }} />
     )
 }
+  constructor(props){
+    super(props)
+    this.state = {checked: false}
+  }
   render() {
     return (
 
@@ -52,13 +60,18 @@ export default class LoginScreen extends Component {
           <Text style={styles.forgotTxt} onPress={() => alert("Forgot pressed")}>
             Forgot your password?
           </Text>
+          
 
-          <CheckBox
-            style={styles.checkbox}
-            label='Keep me logged in'
-            checked={false}
-            underlayColor='#fff'
-          />
+
+          {/*<ListItem onPress={()=> this.setState({checked: !this.state.checked})}>*/}
+            <CheckBox 
+            checked= {this.state.checked} onPress={()=> this.setState({checked: !this.state.checked})}
+            title = "Keep me logged in"
+            size = "15"
+            />
+             
+            
+          
 
         </ImageBackground>
 
@@ -129,6 +142,7 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     marginVertical: 5,
+    color: "#723130",
   },
   square: {
     marginVertical: 20,
