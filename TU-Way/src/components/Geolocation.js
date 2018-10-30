@@ -3,7 +3,7 @@ import { Constants, Location, Permissions } from 'expo';
 import MapView from "react-native-maps"
 
 export default class App extends Component {
-  state = {
+  geoState = {
     location: { coords: {latitude: 0, longitude: 0}},
   };
 

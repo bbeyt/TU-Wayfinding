@@ -5,6 +5,7 @@ import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 
+
 //Get height and width of screen
 var {height, width} = Dimensions.get('window');
 
@@ -36,6 +37,43 @@ class MapScreen extends Component {
 	this.setState({searchTerm: term})
     }
 
+
+    geoState = {
+        location: { coords: {latitude: 0, longitude: 0}},
+      };
+    
+      componentWillMount() {
+          this._getLocationAsync();
+        
+      }
+    
+    
+      async _getLocationAsync() {
+        const {status} = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+          this.setState({
+            errorMessage: 'Permission to access location was denied',
+          });
+        }
+        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}, this.locationChanged);
+      }
+      
+      locationChanged = (location) => {
+        region = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.05,
+        },
+        this.setState({location, region})
+      }
+
+
+
+
+
+
+
    render() {
 
 	//creates a filter to filter through classes
@@ -53,7 +91,7 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
 
-		//ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
+		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
         <MapView 
                     
@@ -64,12 +102,14 @@ class MapScreen extends Component {
                         latitudeDelta: 0.0102,
                         longitudeDelta: 0.0086
                     }}
+                    showsUserLocation={true}
+                    region={this.state.region}
                 />
 		</ScrollView>
 
-    //View encasing SearchBar
+    {/*View encasing SearchBar*/}
     <KeyboardAvoidingView  behavior="height" enabled>
-		var term= "";
+		
                 <SearchBar
                     style={styles.searchBar}
                     containerStyle={{ backgroundColor: 'white' }}
@@ -85,7 +125,7 @@ class MapScreen extends Component {
 			</SearchBar>
                 </KeyboardAvoidingView>
 		
-	//Circular buttons under search bar
+	{/*Circular buttons under search bar*/}
 	<KeyboardAvoidingView style={styles.buttons} 
 			flexDirection={'row'} 
 			justifyContent = {'space-evenly'} 
@@ -118,10 +158,10 @@ class MapScreen extends Component {
                                 </TouchableOpacity>
                 </KeyboardAvoidingView>
 
-		//Adds extra spacing below buttons to appear more comfortable
+		{/*Adds extra spacing below buttons to appear more comfortable*/}
 		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
 
-		//Flatlist of classList, filters when you begin typing
+		{/*Flatlist of classList, filters when you begin typing*/}
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
