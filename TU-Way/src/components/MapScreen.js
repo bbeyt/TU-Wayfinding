@@ -84,7 +84,11 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
 
+<<<<<<< HEAD
                 {/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
+=======
+                //ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
                     <MapView
                         style={{ flex: 1 }}
@@ -97,15 +101,26 @@ class MapScreen extends Component {
                     />
                 </ScrollView>
 
+<<<<<<< HEAD
                 {/*View encasing SearchBar*/}
                 <KeyboardAvoidingView behavior="height" enabled>
                     <SearchBar
+=======
+                //View encasing SearchBar
+                <KeyboardAvoidingView behavior="height" enabled>
+                    var term= "";
+                <SearchBar
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                         style={styles.searchBar}
                         containerStyle={{ backgroundColor: 'white' }}
                         inputStyle={{ backgroundColor: 'white' }}
                         ref={search => this.search = search}
                         clearIcon={{ color: 'red' }}
+<<<<<<< HEAD
                         searchIcon={false}
+=======
+                        searchIcon={false} // You could have passed `null` too
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                         onChangeText={(term) => { this.searchUpdated(term) }}
                         onClear={() => this.search.clear()}
                         placeholder='Type Here...'
@@ -114,7 +129,11 @@ class MapScreen extends Component {
                     </SearchBar>
                 </KeyboardAvoidingView>
 
+<<<<<<< HEAD
                 {/*Circular buttons under search bar*/}
+=======
+                //Circular buttons under search bar
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                 <KeyboardAvoidingView style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
@@ -147,10 +166,17 @@ class MapScreen extends Component {
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
+<<<<<<< HEAD
                 {/*Adds extra spacing below buttons to appear more comfortable*/}
                 <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
 
                 {/*Flatlist of classList, filters when you begin typing*/}
+=======
+                //Adds extra spacing below buttons to appear more comfortable
+                <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
+
+                //Flatlist of classList, filters when you begin typing
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
                     <FlatList data={filteredTerms} renderItem={({ item }) =>
                         <TouchableOpacity style={styles.buttonList}
