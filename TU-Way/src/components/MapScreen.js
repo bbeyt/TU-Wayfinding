@@ -4,6 +4,7 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
+import MapViewDirections from 'react-native-maps-directions';
 
 //Get height and width of screen
 var {height, width} = Dimensions.get('window');
@@ -17,6 +18,15 @@ var classList = [{key: 'Principles of Computer Science II'}, {key: 'Low-Level Co
 //List of classes that have been filtered by current search criteria
 var filteredTerms =[] ;	
 
+
+//const origin = {latitude: 29.463144, longitude: -98.483166};
+//const destination = {latitude: 29.459144, longitude: -98.483166};
+
+const origin = 'Trinity University';
+//const destination = 'Bombay Bicycle Club';
+//const destination = '';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
+
 class MapScreen extends Component {
 
     static navigationOptions = {
@@ -28,7 +38,10 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-        this.state = {searchTerm: ''};
+        this.state = {
+			searchTerm: '',
+			destination: ''
+		};
     }
 
     //updates searchTerm to the current search criteria
@@ -56,14 +69,42 @@ class MapScreen extends Component {
 		//ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
-                    style={{ flex: 1 }}
-                    initialRegion={{
-                        latitude: 29.461144,
-                        longitude: -98.483166,
-                        latitudeDelta: 0.0102,
-                        longitudeDelta: 0.0086
-                    }}
-                />
+			style={{ flex: 1 }}
+			initialRegion={{
+				latitude: 29.461144,
+				longitude: -98.483166,
+				latitudeDelta: 0.0102,
+				longitudeDelta: 0.0086
+			}}
+			ref={c => this.mapView = c}
+			onPress={this.onMapPress}
+		>
+			<MapViewDirections
+				origin={origin}
+				destination={this.state.destination}
+				apikey={GOOGLE_MAPS_API_KEY}
+				strokeWidth={4}
+				strokeColor="limegreen"
+				mode="walking"
+				onStart={(params) => {
+					console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+				}}
+				onReady={(result) => {
+					this.mapView.fitToCoordinates(result.coordinates, {
+						edgePadding: {
+							right: (width / 20),
+							bottom: (height / 20),
+							left: (width / 20),
+							top: (height / 20),
+						}
+					});
+				}}
+				onError={(errorMessage) => {
+					console.log('Error encountered in MapViewDirections: ');
+					console.log("${errorMessage}");
+				}}
+			/>
+		</MapView>
 		</ScrollView>
 
     //View encasing SearchBar
@@ -124,7 +165,13 @@ class MapScreen extends Component {
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
-			    onPress={() =>Keyboard.dismiss}>
+			    onPress={() => {
+					Keyboard.dismiss
+					this.setState({
+						destination: 'Bombay Bicycle Club'
+					})
+				}
+			}>
         		    <Text style= {styles.listText}>{item.key}</Text>	
 			</TouchableOpacity>
 			}
