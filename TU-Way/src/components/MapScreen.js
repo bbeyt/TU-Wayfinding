@@ -33,7 +33,7 @@ class MapScreen extends Component {
         )
     }
 
-    {/*Constructor to start search term as empty string*/}
+    //Constructor to start search term as empty string
     constructor(props) {
         super(props);
         this.state = {
@@ -42,7 +42,7 @@ class MapScreen extends Component {
 		};
     }
 
-    {/*updates searchTerm to the current search criteria*/}
+    //updates searchTerm to the current search criteria
     searchUpdated(term) {
         this.setState({ searchTerm: term })
     }
