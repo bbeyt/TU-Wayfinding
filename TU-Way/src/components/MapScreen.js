@@ -4,6 +4,8 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
+import axios from 'axios';
+import icalParser from 'ical-parser';
 
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
@@ -31,6 +33,30 @@ class MapScreen extends Component {
         this.state = { searchTerm: '' };
     }
 
+    componentDidMount() {
+        axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
+            .then(function (res) {
+                icalParser.convert(res.data, function (error, parsedResponse) {
+                    if (error) {
+                        console.log("Error occured while parsing iCal data.");
+                    } else {
+                        console.log(parsedResponse);
+                        const events = parsedResponse.VCALENDAR[0].VEVENT.map(function (event) {
+                            return {
+                                key: event.SUMMARY,
+                                location: event.LOCATION.substring(0, event.LOCATION.indexOf("\\")),
+                                description: event.DESCRIPTION
+                            }
+                        });
+                        classList = classList.concat(events);
+                    }
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     //updates searchTerm to the current search criteria
     searchUpdated(term) {
         this.setState({ searchTerm: term })
@@ -53,7 +79,7 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
 
-                //ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
+                {/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
                     <MapView
                         style={{ flex: 1 }}
@@ -66,10 +92,9 @@ class MapScreen extends Component {
                     />
                 </ScrollView>
 
-                //View encasing SearchBar
+                {/*View encasing SearchBar*/}
                 <KeyboardAvoidingView behavior="height" enabled>
-                    var term= "";
-                <SearchBar
+                    <SearchBar
                         style={styles.searchBar}
                         containerStyle={{ backgroundColor: 'white' }}
                         inputStyle={{ backgroundColor: 'white' }}
@@ -84,7 +109,7 @@ class MapScreen extends Component {
                     </SearchBar>
                 </KeyboardAvoidingView>
 
-                //Circular buttons under search bar
+                {/*Circular buttons under search bar*/}
                 <KeyboardAvoidingView style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
@@ -117,10 +142,10 @@ class MapScreen extends Component {
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
-                //Adds extra spacing below buttons to appear more comfortable
+                {/*Adds extra spacing below buttons to appear more comfortable*/}
                 <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
 
-                //Flatlist of classList, filters when you begin typing
+                {/*}Flatlist of classList, filters when you begin typing*/}
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
                     <FlatList data={filteredTerms} renderItem={({ item }) =>
                         <TouchableOpacity style={styles.buttonList}
