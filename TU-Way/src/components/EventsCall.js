@@ -4,7 +4,7 @@ const util = require('util');
 axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
     .then(function (res) {
         const lines = res.data.split("\n");
-        let events = [{}];
+        let events = [];
         let events_i = 0;
         for (i = 0; i < lines.length; i++) {
             if (lines[i].includes('DTSTART')) {

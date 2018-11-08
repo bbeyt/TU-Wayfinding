@@ -5,7 +5,37 @@ import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import axios from 'axios';
-import icalParser from 'ical-parser';
+import Geocoder from 'react-native-geocoding';
+
+const axios = require('axios');
+
+const baseURL = "https://maps.googleapis.com/maps/api/directions/json";
+const originLatLong = "29.460987,-98.482356";
+const destinationLatLong = "29.463259,-98.482488";
+const apiKey = "AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY";
+const dirMode = "walking";
+
+axios.get(baseURL, {
+    params: {
+        origin: originLatLong,
+        destination: destinationLatLong,
+        key: apiKey,
+        mode: dirMode
+    }
+})
+
+Geocoder.init(apiKey);
+
+//Order is "Name": ["Latitude,Longitude"]
+
+var nameToCoordinate = {"Mabee": ["29.460987,-98.482356"], "WBC": ["29.459727,-98.483617"], "WITT": ["29.461367,-98.482488"], 
+"COAT": ["29.462540,-98.482050", "29.462747,-98.482069", "29.462818,-98.482171", "29.462796,-98.482495", "29.462911,-98.482496"], 
+"Community and Campus Involvement": ["29.462773,-98.482756"], "NH": ["29.463259,-98.482488", "29.463255,-98.482792"], 
+"Financial Services": ["29.463317,-98.482430"], "Tower": ["29.462911,-98.483532"], "MPC": ["29.463027,-98.483903", "29.462915,-98.484398"], 
+"SML": ["29.462498,-98.483948", "29.462466,-98.484082"], "RTT": ["29.463746,-98.482417"], "DSB": ["29.463619,-98.481803", "29.463748,-98.482294"], 
+"LA": ["29.464673,-98.481816", "29.464186,-98.482196"], "Library": ["29.464903,-98.483136"], "HAS": ["29.465646,-98.483863"], 
+"CGC": ["29.465046,-98.484164", "29.464955,-98.483885", "29.465421,-98.483883"], 
+"CSI": ["29.463982,-98.483790", "29.464406,-98.483688", "29.464784,-98.483875"]};
 
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
@@ -36,21 +66,7 @@ class MapScreen extends Component {
     componentDidMount() {
         axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
             .then(function (res) {
-                icalParser.convert(res.data, function (error, parsedResponse) {
-                    if (error) {
-                        console.log("Error occured while parsing iCal data.");
-                    } else {
-                        console.log(parsedResponse);
-                        const events = parsedResponse.VCALENDAR[0].VEVENT.map(function (event) {
-                            return {
-                                key: event.SUMMARY,
-                                location: event.LOCATION.substring(0, event.LOCATION.indexOf("\\")),
-                                description: event.DESCRIPTION
-                            }
-                        });
-                        classList = classList.concat(events);
-                    }
-                });
+                //TODO: parse ics data and add to classList
             })
             .catch(function (error) {
                 console.log(error);
@@ -79,7 +95,15 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
 
+<<<<<<< HEAD
                 {/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
+=======
+<<<<<<< HEAD
+                {/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
+=======
+                //ScrollView used to dismiss keyboard when tapping outside of text box or keyboard
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
+>>>>>>> d9bb6f634921ffb8e64ffd34e13313b5071e690e
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
                     <MapView
                         style={{ flex: 1 }}
@@ -92,15 +116,32 @@ class MapScreen extends Component {
                     />
                 </ScrollView>
 
+<<<<<<< HEAD
                 {/*View encasing SearchBar*/}
                 <KeyboardAvoidingView behavior="height" enabled>
                     <SearchBar
+=======
+<<<<<<< HEAD
+                {/*View encasing SearchBar*/}
+                <KeyboardAvoidingView behavior="height" enabled>
+                    <SearchBar
+=======
+                //View encasing SearchBar
+                <KeyboardAvoidingView behavior="height" enabled>
+                    var term= "";
+                <SearchBar
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
+>>>>>>> d9bb6f634921ffb8e64ffd34e13313b5071e690e
                         style={styles.searchBar}
                         containerStyle={{ backgroundColor: 'white' }}
                         inputStyle={{ backgroundColor: 'white' }}
                         ref={search => this.search = search}
                         clearIcon={{ color: 'red' }}
+<<<<<<< HEAD
+                        searchIcon={false}
+=======
                         searchIcon={false} // You could have passed `null` too
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
                         onChangeText={(term) => { this.searchUpdated(term) }}
                         onClear={() => this.search.clear()}
                         placeholder='Type Here...'
@@ -109,7 +150,15 @@ class MapScreen extends Component {
                     </SearchBar>
                 </KeyboardAvoidingView>
 
+<<<<<<< HEAD
                 {/*Circular buttons under search bar*/}
+=======
+<<<<<<< HEAD
+                {/*Circular buttons under search bar*/}
+=======
+                //Circular buttons under search bar
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
+>>>>>>> d9bb6f634921ffb8e64ffd34e13313b5071e690e
                 <KeyboardAvoidingView style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
@@ -142,10 +191,24 @@ class MapScreen extends Component {
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
+<<<<<<< HEAD
                 {/*Adds extra spacing below buttons to appear more comfortable*/}
                 <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
 
                 {/*}Flatlist of classList, filters when you begin typing*/}
+=======
+<<<<<<< HEAD
+                {/*Adds extra spacing below buttons to appear more comfortable*/}
+                <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
+
+                {/*Flatlist of classList, filters when you begin typing*/}
+=======
+                //Adds extra spacing below buttons to appear more comfortable
+                <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
+
+                //Flatlist of classList, filters when you begin typing
+>>>>>>> 99fccf28b8ab7e4aca6bddb969e8885c46456f42
+>>>>>>> d9bb6f634921ffb8e64ffd34e13313b5071e690e
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
                     <FlatList data={filteredTerms} renderItem={({ item }) =>
                         <TouchableOpacity style={styles.buttonList}
