@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
-import { MapView } from 'expo';
+import { MapView,Permissions,Location  } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
@@ -29,7 +29,7 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-        this.state = {searchTerm: ''};
+        this.state = {searchTerm: '',location: { coords: {latitude: 0, longitude: 0}}, followsUserLocation: false };
     }
 
     //updates searchTerm to the current search criteria
@@ -37,10 +37,6 @@ class MapScreen extends Component {
 	this.setState({searchTerm: term})
     }
 
-
-    geoState = {
-        location: { coords: {latitude: 0, longitude: 0}},
-      };
     
       componentWillMount() {
           this._getLocationAsync();
@@ -55,23 +51,9 @@ class MapScreen extends Component {
             errorMessage: 'Permission to access location was denied',
           });
         }
-        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}, this.locationChanged);
+        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
       }
       
-      locationChanged = (location) => {
-        region = {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.05,
-        },
-        this.setState({location, region})
-      }
-
-
-
-
-
 
 
    render() {
@@ -103,8 +85,13 @@ class MapScreen extends Component {
                         longitudeDelta: 0.0086
                     }}
                     showsUserLocation={true}
-                    region={this.state.region}
+                    followsUserLocation={this.state.followsUserLocation}
                 />
+        <Button  style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}
+         onPress={ () => {this.setState({followsUserLocation: !this.state.followsUserLocation})}}>
+            
+          <Text>press</Text>
+        </Button>
 		</ScrollView>
 
     {/*View encasing SearchBar*/}
