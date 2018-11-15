@@ -4,14 +4,12 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
-//import Geocoder from 'react-native-geocoding';
 import coordRefs from './CoordRef.js';
+import axios from 'axios';
 
 //import CoordRef.js;
 
 console.log(coordRefs);
-
-const axios = require('axios');
 
 const baseURL = "https://maps.googleapis.com/maps/api/directions/json";
 const originLatLong = "29.460987,-98.482356";
@@ -69,6 +67,16 @@ class MapScreen extends Component {
     constructor(props) {
         super(props);
         this.state = { searchTerm: '' };
+    }
+
+    componentDidMount() {
+        axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
+            .then(function (res) {
+                //TODO: parse ics data and add to classList
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     //updates searchTerm to the current search criteria
