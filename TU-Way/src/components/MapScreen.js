@@ -29,7 +29,7 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-        this.state = {searchTerm: '',location: { coords: {latitude: 0, longitude: 0}}, followsUserLocation: false };
+        this.state = {searchTerm: '', followsUserLocation: false };
     }
 
     //updates searchTerm to the current search criteria
@@ -86,12 +86,20 @@ class MapScreen extends Component {
                     }}
                     showsUserLocation={true}
                     followsUserLocation={this.state.followsUserLocation}
+                    sshowsMyLocationButton={true}
+                    provider="google"
+
+                    
+
                 />
+
+           <MapView.Overlay>  
         <Button  style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}
          onPress={ () => {this.setState({followsUserLocation: !this.state.followsUserLocation})}}>
             
           <Text>press</Text>
         </Button>
+        </MapView.Overlay>   
 		</ScrollView>
 
     {/*View encasing SearchBar*/}
