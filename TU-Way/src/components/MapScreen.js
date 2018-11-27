@@ -4,11 +4,12 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
+import coordRefs from './CoordRef.js';
 import axios from 'axios';
 
 //Order is "Name": ["Latitude,Longitude"]
 
-var nameToCoordinate = {
+/* var nameToCoordinate = {
     "Mabee": ["29.460987,-98.482356"], "WBC": ["29.459727,-98.483617"], "WITT": ["29.461367,-98.482488"],
     "COAT": ["29.462540,-98.482050", "29.462747,-98.482069", "29.462818,-98.482171", "29.462796,-98.482495", "29.462911,-98.482496"],
     "Community and Campus Involvement": ["29.462773,-98.482756"], "NH": ["29.463259,-98.482488", "29.463255,-98.482792"],
@@ -18,7 +19,7 @@ var nameToCoordinate = {
     "CGC": ["29.465046,-98.484164", "29.464955,-98.483885", "29.465421,-98.483883"],
     "CSI": ["29.463982,-98.483790", "29.464406,-98.483688", "29.464784,-98.483875"]
 };
-
+ */
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
 
