@@ -5,24 +5,38 @@ axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.i
     .then(function (res) {
         const lines = res.data.split("\n");
         let events = [];
-        let events_i = 0;
+        let date = '';
+        let key = '';
+        let location = '';
+        let previousKey = '';
         for (i = 0; i < lines.length; i++) {
             if (lines[i].includes('DTSTART')) {
-                const date = lines[i].split(":");
-                events[events_i] = { date: date[1] };
+                date = lines[i].split(":")[1].trim();
             }
             else if (lines[i].includes('SUMMARY')) {
-                const title = lines[i].split(":");
-                events[events_i]["title"] = title[1];
+                key = lines[i].split(":")[1].trim();
             }
             else if (lines[i].includes('LOCATION')) {
-                const location = lines[i].split(":");
-                events[events_i]["location"] = location[1];
+                location = lines[i].split(":")[1].split('\\')[0];
             }
             else if (lines[i].includes('END:VEVENT')) {
-                events_i++;
+                if (key === '' || date === '' || location === '') {
+                    console.log("Warning: Upcoming event field not found.");
+                }
+                if (previousKey == key) {
+                    events.push({
+                        key: key,
+                        date: date,
+                        location: location
+                    });
+                    previousKey = key;
+                }
+                key = '';
+                date = '';
+                location = '';
             }
         }
+
         console.log(util.inspect(events, false, 5, false));
         /* icalParser.convert(res.data, function (error, parsedResponse) {
             if (error) {
