@@ -115,8 +115,7 @@ class MapScreen extends Component {
 
     
     componentWillMount() {
-        this._getLocationAsync();
-        
+        this._getLocationAsync(); 
     }
     
     
