@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity } from 'react-native';
-import { MapView } from 'expo';
+import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
+import { MapView,Permissions,Location  } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import MapViewDirections from 'react-native-maps-directions';
 import nameToCode from './NameRef.json';
 import codeToCoords from './CoordRef.json';
+
 
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
@@ -112,6 +113,25 @@ class MapScreen extends Component {
         this.setState(prevState => ({ searchTerm: term, searchList: prevState.searchList }));
     }
 
+    
+    componentWillMount() {
+        this._getLocationAsync();
+        
+    }
+    
+    
+    async _getLocationAsync() {
+        const {status} = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+          this.setState({
+            errorMessage: 'Permission to access location was denied',
+          });
+        }
+        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+    }
+      
+
+
     render() {
         //creates a filter to filter through classes
         const filteredTerms = this.state.searchList.filter(createFilter(this.state.searchTerm, keys))
@@ -137,7 +157,11 @@ class MapScreen extends Component {
 				longitude: -98.483166,
 				latitudeDelta: 0.0102,
 				longitudeDelta: 0.0086
-			}}
+            }}
+            showsUserLocation={true}
+            sshowsMyLocationButton={true}
+            provider="google"
+            
 			ref={c => this.mapView = c}
 			onPress={this.onMapPress}
 		>
