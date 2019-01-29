@@ -37,14 +37,10 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-<<<<<<< HEAD
         this.state = {
 			searchTerm: '',
             destination: '',
 		};
-=======
-        this.state = {searchTerm: ''} //, followsUserLocation: false };
->>>>>>> bdc53c7d88c21a43bc1e65a12cb20c2f58d133a4
     }
 
     //updates searchTerm to the current search criteria
@@ -90,7 +86,6 @@ class MapScreen extends Component {
 
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
-<<<<<<< HEAD
 		<MapView 
 			style={{ flex: 1 }}
 			initialRegion={{
@@ -132,33 +127,6 @@ class MapScreen extends Component {
 				}}
 			/>
 		</MapView>
-=======
-        <MapView 
-                    
-                    style={{ flex: 1 }}
-                    initialRegion={{
-                        latitude: 29.461144,
-                        longitude: -98.483166,
-                        latitudeDelta: 0.0102,
-                        longitudeDelta: 0.0086
-                    }}
-                    showsUserLocation={true}
-                    followsUserLocation= {true} {/*{this.state.followsUserLocation}*/}
-                    sshowsMyLocationButton={true}
-                    provider="google"
-
-                    
-
-                />
-
-          { /*<MapView.Overlay>  
-        <Button  style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}
-          onPress={ () => {this.setState({followsUserLocation: !this.state.followsUserLocation})}}>
-            
-          <Text>press</Text>
-        </Button>
-          </MapView.Overlay>   */}
->>>>>>> bdc53c7d88c21a43bc1e65a12cb20c2f58d133a4
 		</ScrollView>
 
     {/*View encasing SearchBar*/}
