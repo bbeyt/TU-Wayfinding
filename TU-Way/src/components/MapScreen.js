@@ -4,9 +4,10 @@ import { MapView } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
-import nameToCoords from './NameToCoords.js';
 import axios from 'axios';
 import MapViewDirections from 'react-native-maps-directions';
+import nameToCode from './NameRef.json';
+import codeToCoords from './CoordRef.json';
 
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
@@ -15,14 +16,29 @@ var { height, width } = Dimensions.get('window');
 const keys = ['key'];
 
 //Random list of classes for prototype
-const classList = [{ key: 'Principles of Computer Science II' }, { key: 'Low-Level Computing' }, { key: 'Discrete Structures' }, { key: 'Principles of Data Abstraction' }, { key: 'Principles of Functional Languages' }, { key: 'Principles of Algorithms' }, { key: 'Principles of Computer Design' }, { key: 'Software Engineering' }, { key: 'Operating Systems' }, { key: 'Web Application Design' }, { key: 'Senior Software Project' }, { key: 'Calculus III' }, { key: 'Engineering Analysis and Design II' }, { key: 'Graphics' }];
+const classList = [{ key: 'Principles of Computer Science II', location: 'CSI' }, 
+                   { key: 'Low-Level Computing', location: 'CSI' }, 
+                   { key: 'Discrete Structures', location: 'CSI' }, 
+                   { key: 'Principles of Data Abstraction', location: 'CSI' }, 
+                   { key: 'Principles of Functional Languages', location: 'CSI' }, 
+                   { key: 'Principles of Algorithms', location: 'CSI' }, 
+                   { key: 'Principles of Computer Design', location: 'CSI' }, 
+                   { key: 'Software Engineering', location: 'CSI' }, 
+                   { key: 'Operating Systems', location: 'CSI' }, 
+                   { key: 'Web Application Design', location: 'CSI' }, 
+                   { key: 'Senior Software Project', location: 'CSI' }, 
+                   { key: 'Calculus III', location: 'Chapman' }, 
+                   { key: 'Engineering Analysis and Design II', location: 'CSI' }, 
+                   { key: 'Graphics', location: 'CSI' }];
 
-
-//const origin = {latitude: 29.463144, longitude: -98.483166};
-//const destination = {latitude: 29.459144, longitude: -98.483166};
 
 const origin = 'Trinity University';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
+
+//Function used to convert a valid location name from those listed in NameRef.json into a list of entrance coordinates.
+const nameToCoords = (name) => {
+    return codeToCoords[nameToCode[name.toUpperCase()]];
+}
 
 class MapScreen extends Component {
 
@@ -211,10 +227,12 @@ class MapScreen extends Component {
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
 			    onPress={() => {
-					Keyboard.dismiss
+                    Keyboard.dismiss;
+                    const coord = nameToCoords(item.location)[0];
+                    console.log(coord);
 					this.setState({
-						destination: 'Bombay Bicycle Club'
-					})
+						destination: coord
+					});
 				}
 			}>
         		    <Text style= {styles.listText}>{item.key}</Text>	
