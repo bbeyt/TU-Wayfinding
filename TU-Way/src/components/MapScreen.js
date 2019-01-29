@@ -40,6 +40,7 @@ class MapScreen extends Component {
         this.state = {
 			searchTerm: '',
             destination: '',
+            location:{},
 		};
     }
 
@@ -63,9 +64,9 @@ class MapScreen extends Component {
           });
         }
         Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
-      }
-      
-
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ location });
+    }
 
    render() {
 
@@ -95,6 +96,7 @@ class MapScreen extends Component {
 				longitudeDelta: 0.0086
             }}
             showsUserLocation={true}
+            followsUserLocation={true}
             sshowsMyLocationButton={true}
             provider="google"
             
