@@ -6,6 +6,7 @@ import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import nameToCoords from './NameToCoords.js';
 import axios from 'axios';
+import MapViewDirections from 'react-native-maps-directions';
 
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
@@ -15,6 +16,13 @@ const keys = ['key'];
 
 //Random list of classes for prototype
 const classList = [{ key: 'Principles of Computer Science II' }, { key: 'Low-Level Computing' }, { key: 'Discrete Structures' }, { key: 'Principles of Data Abstraction' }, { key: 'Principles of Functional Languages' }, { key: 'Principles of Algorithms' }, { key: 'Principles of Computer Design' }, { key: 'Software Engineering' }, { key: 'Operating Systems' }, { key: 'Web Application Design' }, { key: 'Senior Software Project' }, { key: 'Calculus III' }, { key: 'Engineering Analysis and Design II' }, { key: 'Graphics' }];
+
+
+//const origin = {latitude: 29.463144, longitude: -98.483166};
+//const destination = {latitude: 29.459144, longitude: -98.483166};
+
+const origin = 'Trinity University';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
 
 class MapScreen extends Component {
 
@@ -29,7 +37,8 @@ class MapScreen extends Component {
         super(props);
         this.state = { 
             searchTerm: '',
-            searchList: classList
+            searchList: classList,
+            destination: ''
         };
     }
 
@@ -103,34 +112,62 @@ class MapScreen extends Component {
                     <Right />
                 </Header>
 
-                {/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-                    <MapView
-                        style={{ flex: 1 }}
-                        initialRegion={{
-                            latitude: 29.461144,
-                            longitude: -98.483166,
-                            latitudeDelta: 0.0102,
-                            longitudeDelta: 0.0086
-                        }}
-                    />
-                </ScrollView>
+		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
+                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
+		<MapView 
+			style={{ flex: 1 }}
+			initialRegion={{
+				latitude: 29.461144,
+				longitude: -98.483166,
+				latitudeDelta: 0.0102,
+				longitudeDelta: 0.0086
+			}}
+			ref={c => this.mapView = c}
+			onPress={this.onMapPress}
+		>
+			<MapViewDirections
+				origin={origin}
+				destination={this.state.destination}
+				apikey={GOOGLE_MAPS_API_KEY}
+				strokeWidth={4}
+				strokeColor="limegreen"
+				mode="walking"
+				onStart={(params) => {
+					console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+				}}
+				onReady={(result) => {
+					this.mapView.fitToCoordinates(result.coordinates, {
+						edgePadding: {
+							right: (width / 20),
+							bottom: (height / 20),
+							left: (width / 20),
+							top: (height / 20),
+						}
+					});
+				}}
+				onError={(errorMessage) => {
+					console.log('Error encountered in MapViewDirections: ');
+					console.log("${errorMessage}");
+				}}
+			/>
+		</MapView>
+		</ScrollView>
 
-                {/*View encasing SearchBar*/}
-                <KeyboardAvoidingView behavior="height" enabled>
-                    <SearchBar
-                        style={styles.searchBar}
-                        containerStyle={{ backgroundColor: 'white' }}
-                        inputStyle={{ backgroundColor: 'white' }}
-                        ref={search => this.search = search}
-                        clearIcon={{ color: 'red' }}
-                        searchIcon={false}
-                        onChangeText={(term) => { this.searchUpdated(term) }}
-                        onClear={() => this.search.clear()}
-                        placeholder='Search...'
-                        onSubmitEditing={Keyboard.dismiss}
-                    >
-                    </SearchBar>
+    {/*View encasing SearchBar*/}
+    <KeyboardAvoidingView  behavior="height" enabled>
+			<SearchBar
+				style={styles.searchBar}
+				containerStyle={{ backgroundColor: 'white' }}
+				inputStyle={{ backgroundColor: 'white' }}
+				ref={search => this.search = search}
+				clearIcon={{ color: 'red' }}
+				searchIcon={false}
+				onChangeText={(term) => {this.searchUpdated(term)}}
+				onClear={() => this.search.clear()}
+				placeholder='Type Here...'
+		    onSubmitEditing={Keyboard.dismiss}
+                >
+			</SearchBar>
                 </KeyboardAvoidingView>
 
                 {/*Circular buttons under search bar*/}
@@ -166,22 +203,25 @@ class MapScreen extends Component {
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
-                {/*Adds extra spacing below buttons to appear more comfortable*/}
-                <KeyboardAvoidingView style={{ flex: 0.01 }} behavior="position" />
+		{/*Adds extra spacing below buttons to appear more comfortable*/}
+		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
 
-                {/*Flatlist of classList, filters when you begin typing*/}
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-                    <FlatList data={filteredTerms} renderItem={({ item }) =>
-                        <TouchableOpacity style={styles.buttonList}
-                            onPress={() => {
-                                Keyboard.dismiss
-                            }}
-                        >
-                            <Text style={styles.listText}>{item.key}</Text>
-                        </TouchableOpacity>
-                    }
-                    />
-                </KeyboardAvoidingView>
+		{/*Flatlist of classList, filters when you begin typing*/}
+		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
+		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
+			<TouchableOpacity style= {styles.buttonList}
+			    onPress={() => {
+					Keyboard.dismiss
+					this.setState({
+						destination: 'Bombay Bicycle Club'
+					})
+				}
+			}>
+        		    <Text style= {styles.listText}>{item.key}</Text>	
+			</TouchableOpacity>
+			}
+		    />
+		</KeyboardAvoidingView>
             </Container>
         );
     }
