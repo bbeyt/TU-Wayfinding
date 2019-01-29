@@ -29,7 +29,7 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-        this.state = {searchTerm: '', followsUserLocation: false };
+        this.state = {searchTerm: ''} //, followsUserLocation: false };
     }
 
     //updates searchTerm to the current search criteria
@@ -85,7 +85,7 @@ class MapScreen extends Component {
                         longitudeDelta: 0.0086
                     }}
                     showsUserLocation={true}
-                    followsUserLocation={this.state.followsUserLocation}
+                    followsUserLocation= {true} {/*{this.state.followsUserLocation}*/}
                     sshowsMyLocationButton={true}
                     provider="google"
 
@@ -93,13 +93,13 @@ class MapScreen extends Component {
 
                 />
 
-           <MapView.Overlay>  
+          { /*<MapView.Overlay>  
         <Button  style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}
-         onPress={ () => {this.setState({followsUserLocation: !this.state.followsUserLocation})}}>
+          onPress={ () => {this.setState({followsUserLocation: !this.state.followsUserLocation})}}>
             
           <Text>press</Text>
         </Button>
-        </MapView.Overlay>   
+          </MapView.Overlay>   */}
 		</ScrollView>
 
     {/*View encasing SearchBar*/}
