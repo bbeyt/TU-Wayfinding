@@ -55,7 +55,8 @@ class MapScreen extends Component {
         this.state = { 
             searchTerm: '',
             searchList: classList,
-            destination: ''
+            destination: '',
+            location: {}
         };
     }
 
@@ -127,9 +128,9 @@ class MapScreen extends Component {
           });
         }
         Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ location });
     }
-      
-
 
     render() {
         //creates a filter to filter through classes
@@ -158,6 +159,7 @@ class MapScreen extends Component {
 				longitudeDelta: 0.0086
             }}
             showsUserLocation={true}
+            followsUserLocation={true}
             sshowsMyLocationButton={true}
             provider="google"
             
