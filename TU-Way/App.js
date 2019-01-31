@@ -4,7 +4,6 @@ import { View, Image, SafeAreaView, ScrollView, Dimensions } from 'react-native'
 import LoginScreen from './src/components/LoginScreen';
 import MapScreen from './src/components/MapScreen';
 import SettingsScreen from './src/components/SettingsScreen';
-import ContactsScreen from './src/components/ContactsScreen';
 
 const { width } = Dimensions.get("window");
 
@@ -30,8 +29,7 @@ const CustomDrawerComponent = (props) => (
 const AppDrawerNavigator = createDrawerNavigator({
   Map: MapScreen,
   Settings: SettingsScreen,
-  Login: LoginScreen,
-  Contacts: ContactsScreen
+  Login: LoginScreen
 }, {
     contentComponent: CustomDrawerComponent,
     drawerWidth: width,
