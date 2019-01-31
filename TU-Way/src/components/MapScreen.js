@@ -30,7 +30,9 @@ const classList = [{ key: 'Principles of Computer Science II', location: 'CSI' }
                    { key: 'Senior Software Project', location: 'CSI' }, 
                    { key: 'Calculus III', location: 'Chapman' }, 
                    { key: 'Engineering Analysis and Design II', location: 'CSI' }, 
-                   { key: 'Graphics', location: 'CSI' }];
+                   { key: 'Graphics', location: 'CSI' },
+                   { key: 'Spanish I', location: 'Northrup' },
+                   { key: 'Library Shift', location: 'CoatES lIBraRY'}];
 
 
 const origin = 'Trinity University';
@@ -39,6 +41,27 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
 //Function used to convert a valid location name from those listed in NameRef.json into a list of entrance coordinates.
 const nameToCoords = (name) => {
     return codeToCoords[nameToCode[name.toUpperCase()]];
+}
+
+//Function to find the distance in miles between two points given in latitude and longitude
+const distance = (lat1, long1, lat2, long2) => {
+	if ((lat1 == lat2) && (long1 == long2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = long1-long2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		return dist;
+	}
 }
 
 class MapScreen extends Component {
@@ -55,8 +78,10 @@ class MapScreen extends Component {
         this.state = { 
             searchTerm: '',
             searchList: classList,
+            origin: '',
             destination: '',
-            location: {}
+            location: {},
+            errorMessage: ''
         };
     }
 
@@ -99,8 +124,7 @@ class MapScreen extends Component {
                 }
                 this.setState(prevState => (
                     { 
-                        searchTerm: prevState.searchTerm,
-                        searchList: prevState.searchList.concat(events)
+                        searchList: prevState.searchList.concat(events),
                     }
                 ))
             })
@@ -111,7 +135,11 @@ class MapScreen extends Component {
 
     //updates searchTerm to the current search criteria
     searchUpdated(term) {
-        this.setState(prevState => ({ searchTerm: term, searchList: prevState.searchList }));
+        this.setState(prevState => (
+            { 
+                searchTerm: term
+            }
+        ));
     }
 
     
@@ -127,9 +155,9 @@ class MapScreen extends Component {
             errorMessage: 'Permission to access location was denied',
           });
         }
-        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+        Location.watchPositionAsync({ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
+        this.setState({ location: location });
     }
 
     render() {
@@ -167,7 +195,7 @@ class MapScreen extends Component {
 			onPress={this.onMapPress}
 		>
 			<MapViewDirections
-				origin={origin}
+				origin={this.state.origin}
 				destination={this.state.destination}
 				apikey={GOOGLE_MAPS_API_KEY}
 				strokeWidth={4}
@@ -194,8 +222,8 @@ class MapScreen extends Component {
 		</MapView>
 		</ScrollView>
 
-    {/*View encasing SearchBar*/}
-    <KeyboardAvoidingView  behavior="height" enabled>
+        {/*View encasing SearchBar*/}
+        <KeyboardAvoidingView  behavior="height" enabled>
 			<SearchBar
 				style={styles.searchBar}
 				containerStyle={{ backgroundColor: 'white' }}
@@ -206,43 +234,43 @@ class MapScreen extends Component {
 				onChangeText={(term) => {this.searchUpdated(term)}}
 				onClear={() => this.search.clear()}
 				placeholder='Type Here...'
-		    onSubmitEditing={Keyboard.dismiss}
-                >
-			</SearchBar>
-                </KeyboardAvoidingView>
+		        onSubmitEditing={Keyboard.dismiss}
+            />
+        </KeyboardAvoidingView>
 
-                {/*Circular buttons under search bar*/}
-                <KeyboardAvoidingView style={styles.buttons}
-                    flexDirection={'row'}
-                    justifyContent={'space-evenly'}
-                    alignItems={'center'}
-                    behavior="padding"
-                    enabled >
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Events"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Classes"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Buildings"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Offices"}</Text>
-                    </TouchableOpacity>
-                </KeyboardAvoidingView>
+        {/*Circular buttons under search bar*/}
+        <KeyboardAvoidingView style={styles.buttons}
+            flexDirection={'row'}
+            justifyContent={'space-evenly'}
+            alignItems={'center'}
+            behavior="padding"
+            enabled 
+        >
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Events"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Classes"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Buildings"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Offices"}</Text>
+            </TouchableOpacity>
+        </KeyboardAvoidingView>
 
 		{/*Adds extra spacing below buttons to appear more comfortable*/}
 		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
@@ -250,22 +278,38 @@ class MapScreen extends Component {
 		{/*Flatlist of classList, filters when you begin typing*/}
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
-			<TouchableOpacity style= {styles.buttonList}
-			    onPress={() => {
-                    Keyboard.dismiss;
-                    const coord = nameToCoords(item.location)[0];
-                    console.log(coord);
-					this.setState({
-						destination: coord
-					});
-				}
-			}>
+			    <TouchableOpacity style= {styles.buttonList}
+			        onPress={() => {
+                        Keyboard.dismiss;
+
+                        const currentLat = this.state.location.coords.latitude;
+                        const currentLong = this.state.location.coords.longitude;
+                        const currentLoc = currentLat + ',' + currentLong;
+
+                        const coords = nameToCoords(item.location);
+                        coords.sort(function(lft, rgt) {
+                            const lParts = lft.split(',');
+                            const rParts = rgt.split(',');
+                            const lLat = parseFloat(lParts[0]);
+                            const lLong = parseFloat(lParts[1]);
+                            const rLat = parseFloat(rParts[0]);
+                            const rLong = parseFloat(rParts[1]);
+                            const lDist = distance(currentLat,currentLong,lLat,lLong);
+                            const rDist = distance(currentLat,currentLong,rLat,rLong)
+                            return (lDist - rDist);
+                        });
+
+					    this.setState({
+                            origin: currentLoc,
+						    destination: coords[0]
+					    });
+				    }}
+                >
         		    <Text style= {styles.listText}>{item.key}</Text>	
-			</TouchableOpacity>
-			}
-		    />
+			    </TouchableOpacity>
+			}/>
 		</KeyboardAvoidingView>
-            </Container>
+    </Container>
         );
     }
 }
