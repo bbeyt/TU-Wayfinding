@@ -1,41 +1,26 @@
 import React, { Component } from 'react';
-import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
+import { ScrollView, KeyboardAvoidingView,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
 import { MapView,Permissions,Location  } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
-import SearchInput, { createFilter } from 'react-native-search-filter';
+import { createFilter } from 'react-native-search-filter';
 import axios from 'axios';
 import MapViewDirections from 'react-native-maps-directions';
 import nameToCode from './NameRef.json';
 import codeToCoords from './CoordRef.json';
-
+import buildingsList from './Buildings.json';
+import officesList from './Offices.json';
+import sampleClasses from './SampleClasses.json';
 
 //Get height and width of screen
-var { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
-//Get name of key for list of data
-const keys = ['key'];
+//Get name of key for filtering by search term
+const KEY_FOR_SEARCH_FILTER = ['key'];
 
-//Random list of classes for prototype
-const classList = [{ key: 'Principles of Computer Science II', location: 'CSI' }, 
-                   { key: 'Low-Level Computing', location: 'CSI' }, 
-                   { key: 'Discrete Structures', location: 'CSI' }, 
-                   { key: 'Principles of Data Abstraction', location: 'CSI' }, 
-                   { key: 'Principles of Functional Languages', location: 'CSI' }, 
-                   { key: 'Principles of Algorithms', location: 'CSI' }, 
-                   { key: 'Principles of Computer Design', location: 'CSI' }, 
-                   { key: 'Software Engineering', location: 'CSI' }, 
-                   { key: 'Operating Systems', location: 'CSI' }, 
-                   { key: 'Web Application Design', location: 'CSI' }, 
-                   { key: 'Senior Software Project', location: 'CSI' }, 
-                   { key: 'Calculus III', location: 'Chapman' }, 
-                   { key: 'Engineering Analysis and Design II', location: 'CSI' }, 
-                   { key: 'Graphics', location: 'CSI' },
-                   { key: 'Spanish I', location: 'Northrup' },
-                   { key: 'Library Shift', location: 'CoatES lIBraRY'}];
+//Get name of key for filtering by item type
+const KEY_FOR_TYPE_FILTER = ['type'];
 
-
-const origin = 'Trinity University';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
 
 //Function used to convert a valid location name from those listed in NameRef.json into a list of entrance coordinates.
@@ -49,11 +34,11 @@ const distance = (lat1, long1, lat2, long2) => {
 		return 0;
 	}
 	else {
-		var radlat1 = Math.PI * lat1/180;
-		var radlat2 = Math.PI * lat2/180;
-		var theta = long1-long2;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		const radlat1 = Math.PI * lat1/180;
+		const radlat2 = Math.PI * lat2/180;
+		const theta = long1-long2;
+		const radtheta = Math.PI * theta/180;
+		let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
 		if (dist > 1) {
 			dist = 1;
 		}
@@ -77,7 +62,8 @@ class MapScreen extends Component {
         super(props);
         this.state = { 
             searchTerm: '',
-            searchList: classList,
+            searchType: '',
+            searchList: buildingsList.concat(officesList, sampleClasses),
             origin: '',
             destination: '',
             location: {},
@@ -89,6 +75,7 @@ class MapScreen extends Component {
         //TODO: Get class list from mock database and add to searchList
         axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
             .then((res) => {
+                //Parser for raw ics data to get events into search list
                 const lines = res.data.split("\n");
                 let events = [];
                 let date = '';
@@ -113,7 +100,8 @@ class MapScreen extends Component {
                             events.push({
                                 key: key,
                                 date: date,
-                                location: location
+                                location: location,
+                                type: 'event'
                             });
                             previousKey = key;
                         }
@@ -162,7 +150,9 @@ class MapScreen extends Component {
 
     render() {
         //creates a filter to filter through classes
-        const filteredTerms = this.state.searchList.filter(createFilter(this.state.searchTerm, keys))
+        const filteredTerms = this.state.searchList
+            .filter(createFilter(this.state.searchTerm, KEY_FOR_SEARCH_FILTER))
+            .filter(createFilter(this.state.searchType, KEY_FOR_TYPE_FILTER));
         return (
             <Container>
                 <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
@@ -248,25 +238,37 @@ class MapScreen extends Component {
         >
             <TouchableOpacity
                 style={styles.circle}
-                onPress={Keyboard.dismiss}
+                onPress={() => {
+                    Keyboard.dismiss;
+                    this.setState({ searchType: 'event' });
+                }}
             >
                 <Text style={styles.buttonText}>{"Events"}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.circle}
-                onPress={Keyboard.dismiss}
+                onPress={() => {
+                    Keyboard.dismiss;
+                    this.setState({ searchType: 'class' });
+                }}
             >
                 <Text style={styles.buttonText}>{"Classes"}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.circle}
-                onPress={Keyboard.dismiss}
+                onPress={() => {
+                    Keyboard.dismiss;
+                    this.setState({ searchType: 'building' });
+                }}
             >
                 <Text style={styles.buttonText}>{"Buildings"}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.circle}
-                onPress={Keyboard.dismiss}
+                onPress={() => {
+                    Keyboard.dismiss;
+                    this.setState({ searchType: 'office' });
+                }}
             >
                 <Text style={styles.buttonText}>{"Offices"}</Text>
             </TouchableOpacity>
