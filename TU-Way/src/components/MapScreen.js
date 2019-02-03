@@ -5,6 +5,7 @@ import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import MapViewDirections from 'react-native-maps-directions';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 
 
 //Get height and width of screen
@@ -38,7 +39,8 @@ class MapScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-			searchTerm: '',
+	    visible:false,
+	    searchTerm: '',
             destination: '',
             location:{},
 		};
@@ -131,8 +133,20 @@ class MapScreen extends Component {
 		</MapView>
 		</ScrollView>
 
+      <View style={styles.container}>
+        <TouchableOpacity title='Show panel' onPress={() => this.setState({visible: true})} />
+        <SlidingUpPanel
+          visible={this.state.visible}
+          onRequestClose={() => this.setState({visible: false})}>
+          <View style={styles.container}>
+            <Text>Here is the content inside panel</Text>
+            <TouchableOpacity title='Hide' onPress={() => this.setState({visible: false})} />
+          </View>
+        </SlidingUpPanel>
+      </View>
+
     {/*View encasing SearchBar*/}
-    <KeyboardAvoidingView  behavior="height" enabled>
+    {/* <KeyboardAvoidingView  behavior="height" enabled>
 			<SearchBar
 				style={styles.searchBar}
 				containerStyle={{ backgroundColor: 'white' }}
@@ -143,13 +157,13 @@ class MapScreen extends Component {
 				onChangeText={(term) => {this.searchUpdated(term)}}
 				onClear={() => this.search.clear()}
 				placeholder='Type Here...'
-		    onSubmitEditing={Keyboard.dismiss}
-                >
+		    		onSubmitEditing={Keyboard.dismiss}
+                	>
 			</SearchBar>
                 </KeyboardAvoidingView>
-
+*/}
                 {/*Circular buttons under search bar*/}
-                <KeyboardAvoidingView style={styles.buttons}
+{/*                <KeyboardAvoidingView style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
                     alignItems={'center'}
@@ -181,11 +195,11 @@ class MapScreen extends Component {
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
-		{/*Adds extra spacing below buttons to appear more comfortable*/}
-		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
-
+*/}		{/*Adds extra spacing below buttons to appear more comfortable*/}
+{/*		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
+*/}
 		{/*Flatlist of classList, filters when you begin typing*/}
-		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
+{/*		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
 			    onPress={() => {
@@ -200,8 +214,10 @@ class MapScreen extends Component {
 			}
 		    />
 		</KeyboardAvoidingView>
+*/}
             </Container>
         );
+
     }
 }
 
@@ -210,6 +226,9 @@ export default MapScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+	backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     buttonText: {
         textAlign: 'center',
