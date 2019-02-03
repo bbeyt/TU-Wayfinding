@@ -1,18 +1,92 @@
 [
-    { "key": "Principles of Computer Science II", "location": "CSI", "type": "class" }, 
-    { "key": "Low-Level Computing", "location": "CSI", "type": "class" }, 
-    { "key": "Discrete Structures", "location": "CSI", "type": "class" }, 
-    { "key": "Principles of Data Abstraction", "location": "CSI", "type": "class" }, 
-    { "key": "Principles of Functional Languages", "location": "CSI", "type": "class" }, 
-    { "key": "Principles of Algorithms", "location": "CSI", "type": "class" }, 
-    { "key": "Principles of Computer Design", "location": "CSI", "type": "class" }, 
-    { "key": "Software Engineering", "location": "CSI", "type": "class" }, 
-    { "key": "Operating Systems", "location": "CSI", "type": "class" }, 
-    { "key": "Web Application Design", "location": "CSI", "type": "class" }, 
-    { "key": "Senior Software Project", "location": "CSI", "type": "class" }, 
-    { "key": "Calculus III", "location": "Chapman", "type": "class" }, 
-    { "key": "Engineering Analysis and Design II", "location": "CSI", "type": "class" }, 
-    { "key": "Graphics", "location": "CSI", "type": "class" },
-    { "key": "Spanish I", "location": "Northrup", "type": "class" },
-    { "key": "Library Shift", "location": "CoatES lIBraRY", "type": "class" }
+    { 
+        "key": "Principles of Computer Science II", 
+        "location": "CSI",
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Low-Level Computing", 
+        "location": "CSI",
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Discrete Structures", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Principles of Data Abstraction", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Principles of Functional Languages", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Principles of Algorithms", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Principles of Computer Design", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Software Engineering", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Operating Systems", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Web Application Design", 
+        "location": "CSI",
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Senior Software Project", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Calculus III", 
+        "location": "Chapman", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Engineering Analysis and Design II", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }, 
+    { 
+        "key": "Graphics", 
+        "location": "CSI", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    },
+    { 
+        "key": "Spanish I", 
+        "location": "Northrup Hall", 
+        "date": "MWF 11:30 AM", 
+        "type": "class" 
+    }
 ]

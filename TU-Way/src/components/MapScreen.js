@@ -191,9 +191,6 @@ class MapScreen extends Component {
 				strokeWidth={4}
 				strokeColor="limegreen"
 				mode="walking"
-				onStart={(params) => {
-					console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-				}}
 				onReady={(result) => {
 					this.mapView.fitToCoordinates(result.coordinates, {
 						edgePadding: {
@@ -206,7 +203,7 @@ class MapScreen extends Component {
 				}}
 				onError={(errorMessage) => {
 					console.log('Error encountered in MapViewDirections: ');
-					console.log("${errorMessage}");
+					console.log(errorMessage);
 				}}
 			/>
 		</MapView>
@@ -289,7 +286,9 @@ class MapScreen extends Component {
                         const currentLoc = currentLat + ',' + currentLong;
 
                         const coords = nameToCoords(item.location);
+                        //Sorts all entrance coordinates by distance from current location to find closest entrance
                         coords.sort(function(lft, rgt) {
+                            //Parses location string into numerical latitude and longitude coordinates
                             const lParts = lft.split(',');
                             const rParts = rgt.split(',');
                             const lLat = parseFloat(lParts[0]);
@@ -307,7 +306,14 @@ class MapScreen extends Component {
 					    });
 				    }}
                 >
-        		    <Text style= {styles.listText}>{item.key}</Text>	
+        		    <Text style= {styles.listText}>{item.key}</Text>
+                    <Text style= {styles.listSubText}>
+                        {
+                            item.type !== 'building' && item.type !== 'office' ? 
+                                (item.hasOwnProperty("date") ? item.date + ' at ' + item.location : item.location)
+                                : null
+                        }
+                    </Text>	
 			    </TouchableOpacity>
 			}/>
 		</KeyboardAvoidingView>
@@ -336,14 +342,20 @@ const styles = StyleSheet.create({
     listText: {
         textAlign: 'left',
         color: 'black',
-        fontSize: width / 30,
+        fontSize: width / 25,
         zIndex: 10,
+    },
+    listSubText: {
+        textAlign: 'left',
+        color: 'grey',
+        fontSize: width / 35,
+        zIndex: 10
     },
     circle: {
         width: width / 5,
         height: width / 5,
         borderRadius: width / 10,
-        backgroundColor: 'maroon',
+        backgroundColor: '#723130',
         justifyContent: 'center',
         zIndex: 10,
     },
