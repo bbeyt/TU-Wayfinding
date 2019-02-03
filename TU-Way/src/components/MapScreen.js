@@ -4,7 +4,10 @@ import { MapView,Permissions,Location  } from 'expo';
 import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
+import axios from 'axios';
 import MapViewDirections from 'react-native-maps-directions';
+import nameToCode from './NameRef.json';
+import codeToCoords from './CoordRef.json';
 
 
 //Get height and width of screen
@@ -14,17 +17,52 @@ var { height, width } = Dimensions.get('window');
 const keys = ['key'];
 
 //Random list of classes for prototype
-var classList = [{ key: 'Principles of Computer Science II' }, { key: 'Low-Level Computing' }, { key: 'Discrete Structures' }, { key: 'Principles of Data Abstraction' }, { key: 'Principles of Functional Languages' }, { key: 'Principles of Algorithms' }, { key: 'Principles of Computer Design' }, { key: 'Software Engineering' }, { key: 'Operating Systems' }, { key: 'Web Application Design' }, { key: 'Senior Software Project' }, { key: 'Calculus III' }, { key: 'Engineering Analysis and Design II' }, { key: 'Graphics' }];
+const classList = [{ key: 'Principles of Computer Science II', location: 'CSI' }, 
+                   { key: 'Low-Level Computing', location: 'CSI' }, 
+                   { key: 'Discrete Structures', location: 'CSI' }, 
+                   { key: 'Principles of Data Abstraction', location: 'CSI' }, 
+                   { key: 'Principles of Functional Languages', location: 'CSI' }, 
+                   { key: 'Principles of Algorithms', location: 'CSI' }, 
+                   { key: 'Principles of Computer Design', location: 'CSI' }, 
+                   { key: 'Software Engineering', location: 'CSI' }, 
+                   { key: 'Operating Systems', location: 'CSI' }, 
+                   { key: 'Web Application Design', location: 'CSI' }, 
+                   { key: 'Senior Software Project', location: 'CSI' }, 
+                   { key: 'Calculus III', location: 'Chapman' }, 
+                   { key: 'Engineering Analysis and Design II', location: 'CSI' }, 
+                   { key: 'Graphics', location: 'CSI' },
+                   { key: 'Spanish I', location: 'Northrup' },
+                   { key: 'Library Shift', location: 'CoatES lIBraRY'}];
 
-//List of classes that have been filtered by current search criteria
-var filteredTerms = [];
-
-
-//const origin = {latitude: 29.463144, longitude: -98.483166};
-//const destination = {latitude: 29.459144, longitude: -98.483166};
 
 const origin = 'Trinity University';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
+
+//Function used to convert a valid location name from those listed in NameRef.json into a list of entrance coordinates.
+const nameToCoords = (name) => {
+    return codeToCoords[nameToCode[name.toUpperCase()]];
+}
+
+//Function to find the distance in miles between two points given in latitude and longitude
+const distance = (lat1, long1, lat2, long2) => {
+	if ((lat1 == lat2) && (long1 == long2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = long1-long2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		return dist;
+	}
+}
 
 class MapScreen extends Component {
 
@@ -37,41 +75,94 @@ class MapScreen extends Component {
     //Constructor to start search term as empty string
     constructor(props) {
         super(props);
-        this.state = {
-			searchTerm: '',
+        this.state = { 
+            searchTerm: '',
+            searchList: classList,
+            origin: '',
             destination: '',
-            location:{},
-		};
+            location: {},
+            errorMessage: ''
+        };
+    }
+
+    componentDidMount() {
+        //TODO: Get class list from mock database and add to searchList
+        axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
+            .then((res) => {
+                const lines = res.data.split("\n");
+                let events = [];
+                let date = '';
+                let key = '';
+                let location = '';
+                let previousKey = '';
+                for (i = 0; i < lines.length; i++) {
+                    if (lines[i].includes('DTSTART')) {
+                        date = lines[i].split(":")[1].trim();
+                    }
+                    else if (lines[i].includes('SUMMARY')) {
+                        key = lines[i].split(":")[1].trim().replace("\\", "");
+                    }
+                    else if (lines[i].includes('LOCATION')) {
+                        location = lines[i].split(":")[1].split('\\')[0];
+                    }
+                    else if (lines[i].includes('END:VEVENT')) {
+                        if (key === '' || date === '' || location === '') {
+                            console.log("Warning: Upcoming event field not found.");
+                        }
+                        if (previousKey != key) {
+                            events.push({
+                                key: key,
+                                date: date,
+                                location: location
+                            });
+                            previousKey = key;
+                        }
+                        key = '';
+                        date = '';
+                        location = '';
+                    }
+                }
+                this.setState(prevState => (
+                    { 
+                        searchList: prevState.searchList.concat(events),
+                    }
+                ))
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     //updates searchTerm to the current search criteria
     searchUpdated(term) {
-        this.setState({ searchTerm: term })
+        this.setState(prevState => (
+            { 
+                searchTerm: term
+            }
+        ));
     }
 
     
-      componentWillMount() {
-          this._getLocationAsync();
-        
-      }
+    componentWillMount() {
+        this._getLocationAsync(); 
+    }
     
     
-      async _getLocationAsync() {
+    async _getLocationAsync() {
         const {status} = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
           this.setState({
             errorMessage: 'Permission to access location was denied',
           });
         }
-        Location.watchPositionAsync({enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+        Location.watchPositionAsync({ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
+        this.setState({ location: location });
     }
 
-   render() {
-
-        {/*creates a filter to filter through classes*/}
-        const filteredTerms = classList.filter(createFilter(this.state.searchTerm, keys))
+    render() {
+        //creates a filter to filter through classes
+        const filteredTerms = this.state.searchList.filter(createFilter(this.state.searchTerm, keys))
         return (
             <Container>
                 <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
@@ -104,7 +195,7 @@ class MapScreen extends Component {
 			onPress={this.onMapPress}
 		>
 			<MapViewDirections
-				origin={origin}
+				origin={this.state.origin}
 				destination={this.state.destination}
 				apikey={GOOGLE_MAPS_API_KEY}
 				strokeWidth={4}
@@ -131,8 +222,8 @@ class MapScreen extends Component {
 		</MapView>
 		</ScrollView>
 
-    {/*View encasing SearchBar*/}
-    <KeyboardAvoidingView  behavior="height" enabled>
+        {/*View encasing SearchBar*/}
+        <KeyboardAvoidingView  behavior="height" enabled>
 			<SearchBar
 				style={styles.searchBar}
 				containerStyle={{ backgroundColor: 'white' }}
@@ -143,43 +234,43 @@ class MapScreen extends Component {
 				onChangeText={(term) => {this.searchUpdated(term)}}
 				onClear={() => this.search.clear()}
 				placeholder='Type Here...'
-		    onSubmitEditing={Keyboard.dismiss}
-                >
-			</SearchBar>
-                </KeyboardAvoidingView>
+		        onSubmitEditing={Keyboard.dismiss}
+            />
+        </KeyboardAvoidingView>
 
-                {/*Circular buttons under search bar*/}
-                <KeyboardAvoidingView style={styles.buttons}
-                    flexDirection={'row'}
-                    justifyContent={'space-evenly'}
-                    alignItems={'center'}
-                    behavior="padding"
-                    enabled >
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Events"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Classes"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Buildings"}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.circle}
-                        onPress={Keyboard.dismiss}
-                    >
-                        <Text style={styles.buttonText}>{"Offices"}</Text>
-                    </TouchableOpacity>
-                </KeyboardAvoidingView>
+        {/*Circular buttons under search bar*/}
+        <KeyboardAvoidingView style={styles.buttons}
+            flexDirection={'row'}
+            justifyContent={'space-evenly'}
+            alignItems={'center'}
+            behavior="padding"
+            enabled 
+        >
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Events"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Classes"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Buildings"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={Keyboard.dismiss}
+            >
+                <Text style={styles.buttonText}>{"Offices"}</Text>
+            </TouchableOpacity>
+        </KeyboardAvoidingView>
 
 		{/*Adds extra spacing below buttons to appear more comfortable*/}
 		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
@@ -187,20 +278,38 @@ class MapScreen extends Component {
 		{/*Flatlist of classList, filters when you begin typing*/}
 		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
-			<TouchableOpacity style= {styles.buttonList}
-			    onPress={() => {
-					Keyboard.dismiss
-					this.setState({
-						destination: 'Bombay Bicycle Club'
-					})
-				}
-			}>
+			    <TouchableOpacity style= {styles.buttonList}
+			        onPress={() => {
+                        Keyboard.dismiss;
+
+                        const currentLat = this.state.location.coords.latitude;
+                        const currentLong = this.state.location.coords.longitude;
+                        const currentLoc = currentLat + ',' + currentLong;
+
+                        const coords = nameToCoords(item.location);
+                        coords.sort(function(lft, rgt) {
+                            const lParts = lft.split(',');
+                            const rParts = rgt.split(',');
+                            const lLat = parseFloat(lParts[0]);
+                            const lLong = parseFloat(lParts[1]);
+                            const rLat = parseFloat(rParts[0]);
+                            const rLong = parseFloat(rParts[1]);
+                            const lDist = distance(currentLat,currentLong,lLat,lLong);
+                            const rDist = distance(currentLat,currentLong,rLat,rLong)
+                            return (lDist - rDist);
+                        });
+
+					    this.setState({
+                            origin: currentLoc,
+						    destination: coords[0]
+					    });
+				    }}
+                >
         		    <Text style= {styles.listText}>{item.key}</Text>	
-			</TouchableOpacity>
-			}
-		    />
+			    </TouchableOpacity>
+			}/>
 		</KeyboardAvoidingView>
-            </Container>
+    </Container>
         );
     }
 }
