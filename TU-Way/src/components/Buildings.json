@@ -1,0 +1,77 @@
+[
+    {
+        "key": "Mabee Dining Hall",
+        "location": "Mabee",
+        "type": "building" 
+    },
+    {
+        "key": "William Bell Athletics Center",
+        "location": "WBC",
+        "type": "building" 
+    },
+    {
+        "key": "Coates University Center",
+        "location": "COAT",
+        "type": "building" 
+    },
+    {
+        "key": "Witt Reception Center",
+        "location": "WTCR",
+        "type": "building" 
+    },
+    {
+        "key": "Northrup Hall",
+        "location": "NH",
+        "type": "building" 
+    },
+    {
+        "key": "Trinity Tower",
+        "location": "Tower",
+        "type": "building" 
+    },
+    {
+        "key": "Margarite B. Parker Chapel",
+        "location": "MPC",
+        "type": "building" 
+    },
+    {
+        "key": "Storch Memorial Building",
+        "location": "SML",
+        "type": "building" 
+    },
+    {
+        "key": "Ruth Taylor Theater",
+        "location": "RTT",
+        "type": "building" 
+    },
+    {
+        "key": "Dicke Art/Smith Music Building",
+        "location": "DSB",
+        "type": "building" 
+    },
+    {
+        "key": "Laurie Auditorium",
+        "location": "LA",
+        "type": "building" 
+    },
+    {
+        "key": "Coates Library",
+        "location": "EHCL",
+        "type": "building" 
+    },
+    {
+        "key": "Halsell Administrative Studies",
+        "location": "HAS",
+        "type": "building" 
+    },
+    {
+        "key": "Chapman Center",
+        "location": "CGC",
+        "type": "building" 
+    },
+    {
+        "key": "Center for Science and Innovation",
+        "location": "CSI",
+        "type": "building" 
+    }
+]
