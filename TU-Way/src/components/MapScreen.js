@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View,ScrollView, KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
+import { View,ScrollView, KeyboardAvoidingView,Button,TouchableWithoutFeedback,Keyboard, Text,StyleSheet,FlatList,Dimensions, TouchableOpacity } from 'react-native';
 import { MapView,Permissions,Location  } from 'expo';
-import { Container, Header, Right, Body, Left, Button, Icon, } from 'native-base';
+import { Container, Header, Right, Body, Left, Icon, } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import MapViewDirections from 'react-native-maps-directions';
@@ -76,7 +76,7 @@ class MapScreen extends Component {
         const filteredTerms = classList.filter(createFilter(this.state.searchTerm, keys))
         return (
             <Container>
-                <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
+           {/*     <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
                     <Left>
                         <Button transparent>
                             <Icon name="menu" onPress={() =>
@@ -86,9 +86,9 @@ class MapScreen extends Component {
                     <Body />
                     <Right />
                 </Header>
-
+*/}
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
-                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
+{/*                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
 			style={{ flex: 1 }}
 			initialRegion={{
@@ -132,15 +132,15 @@ class MapScreen extends Component {
 			/>
 		</MapView>
 		</ScrollView>
-
+*/}
       <View style={styles.container}>
-        <TouchableOpacity title='Show panel' onPress={() => this.setState({visible: true})} />
+        <Button title='Show panel' onPress={() => this.setState({visible: true})} />
         <SlidingUpPanel
           visible={this.state.visible}
           onRequestClose={() => this.setState({visible: false})}>
           <View style={styles.container}>
             <Text>Here is the content inside panel</Text>
-            <TouchableOpacity title='Hide' onPress={() => this.setState({visible: false})} />
+            <Button title='Hide' onPress={() => this.setState({visible: false})} />
           </View>
         </SlidingUpPanel>
       </View>
