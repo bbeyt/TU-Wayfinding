@@ -23,11 +23,6 @@ const KEY_FOR_TYPE_FILTER = ['type'];
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBWZJ_hTM78RKil6GW-aBtqOf0DoNWwmcY';
 
-//Function used to convert a valid location name from those listed in NameRef.json into a list of entrance coordinates.
-const nameToCoords = (name) => {
-    return codeToCoords[nameToCode[name.toUpperCase()]];
-}
-
 //Function to find the distance in miles between two points given in latitude and longitude
 const distance = (lat1, long1, lat2, long2) => {
 	if ((lat1 == lat2) && (long1 == long2)) {
@@ -48,6 +43,33 @@ const distance = (lat1, long1, lat2, long2) => {
 		return dist;
 	}
 }
+
+//Function used to convert a valid location name from those listed in NameRef.json into the closest entrance coordinates.
+const nameToCoords = (name, loc) => {
+    if (!name || !loc) {
+        return '';
+    }
+    const currentLat = loc.coords.latitude;
+    const currentLong = loc.coords.longitude;
+
+    const coords = codeToCoords[nameToCode[name.toUpperCase()]];
+    //Sorts all entrance coordinates by distance from current location to find closest entrance
+    coords.sort(function(lft, rgt) {
+        //Parses location string into numerical latitude and longitude coordinates
+        const lParts = lft.split(',');
+        const rParts = rgt.split(',');
+        const lLat = parseFloat(lParts[0]);
+        const lLong = parseFloat(lParts[1]);
+        const rLat = parseFloat(rParts[0]);
+        const rLong = parseFloat(rParts[1]);
+        const lDist = distance(currentLat,currentLong,lLat,lLong);
+        const rDist = distance(currentLat,currentLong,rLat,rLong)
+        return (lDist - rDist);
+    });
+
+    return coords[0];
+}
+
 
 class MapScreen extends Component {
 
@@ -165,7 +187,15 @@ class MapScreen extends Component {
                     <Body />
                     <Right />
                 </Header>
-
+                <Container style= {{
+                    backgroundColor: "#723130",
+                    flex: this.state.destination ? 0.2 : 0.001,
+                    paddingLeft: "5%"
+                }}>
+                    <Text style= {styles.navtext}>
+                        { this.state.destination ? "Navigating to " + this.state.destination : "" }
+                    </Text>
+                </Container>
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
@@ -186,7 +216,7 @@ class MapScreen extends Component {
 		>
 			<MapViewDirections
 				origin={this.state.origin}
-				destination={this.state.destination}
+				destination={nameToCoords(this.state.destination, this.state.location)}
 				apikey={GOOGLE_MAPS_API_KEY}
 				strokeWidth={4}
 				strokeColor="limegreen"
@@ -280,29 +310,13 @@ class MapScreen extends Component {
 			    <TouchableOpacity style= {styles.buttonList}
 			        onPress={() => {
                         Keyboard.dismiss;
-
                         const currentLat = this.state.location.coords.latitude;
                         const currentLong = this.state.location.coords.longitude;
                         const currentLoc = currentLat + ',' + currentLong;
 
-                        const coords = nameToCoords(item.location);
-                        //Sorts all entrance coordinates by distance from current location to find closest entrance
-                        coords.sort(function(lft, rgt) {
-                            //Parses location string into numerical latitude and longitude coordinates
-                            const lParts = lft.split(',');
-                            const rParts = rgt.split(',');
-                            const lLat = parseFloat(lParts[0]);
-                            const lLong = parseFloat(lParts[1]);
-                            const rLat = parseFloat(rParts[0]);
-                            const rLong = parseFloat(rParts[1]);
-                            const lDist = distance(currentLat,currentLong,lLat,lLong);
-                            const rDist = distance(currentLat,currentLong,rLat,rLong)
-                            return (lDist - rDist);
-                        });
-
 					    this.setState({
                             origin: currentLoc,
-						    destination: coords[0]
+                            destination: item.location
 					    });
 				    }}
                 >
@@ -370,5 +384,16 @@ const styles = StyleSheet.create({
     },
     buttons: {
         paddingVertical: 10,
+    },
+    navbar: {
+        backgroundColor: "#723130",
+        flex: 0.2,
+        paddingLeft: "5%", 
+    },
+    navtext: {
+        color: "white",
+        zIndex: 10,
+        fontSize: width/15,
+        fontWeight: 'bold',
     }
 })
