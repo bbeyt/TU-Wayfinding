@@ -54,9 +54,8 @@ class MapScreen extends Component {
     
       componentWillMount() {
           this._getLocationAsync();
-        
       }
-    
+ 
     
       async _getLocationAsync() {
         const {status} = await Permissions.askAsync(Permissions.LOCATION);
@@ -137,33 +136,24 @@ class MapScreen extends Component {
         <Button title='Show panel' onPress={() => this.setState({visible: true})} />
         <SlidingUpPanel
           visible={this.state.visible}
-          onRequestClose={() => this.setState({visible: false})}>
-          <View style={styles.container}>
-            <Text>Here is the content inside panel</Text>
+          draggableRange = {{top:4*height/5, bottom:0}}
+	  startCollapsed = {false}
+	  onRequestClose={() => this.setState({visible: false})}>
             <Button title='Hide' onPress={() => this.setState({visible: false})} />
-          </View>
-        </SlidingUpPanel>
-      </View>
+		<SearchBar
+          		style={styles.searchBar}
+                        containerStyle={{ backgroundColor: 'white' }}
+                        inputStyle={{ backgroundColor: 'white' }}
+                        ref={search => this.search = search}
+                        clearIcon={{ color: 'red' }}
+                        searchIcon={false}
+                        onChangeText={(term) => {this.searchUpdated(term)}}
+                        onClear={() => this.search.clear()}
+                        placeholder='Type Here...'
+                        onSubmitEditing={Keyboard.dismiss}
+                 ></SearchBar>
 
-    {/*View encasing SearchBar*/}
-    {/* <KeyboardAvoidingView  behavior="height" enabled>
-			<SearchBar
-				style={styles.searchBar}
-				containerStyle={{ backgroundColor: 'white' }}
-				inputStyle={{ backgroundColor: 'white' }}
-				ref={search => this.search = search}
-				clearIcon={{ color: 'red' }}
-				searchIcon={false}
-				onChangeText={(term) => {this.searchUpdated(term)}}
-				onClear={() => this.search.clear()}
-				placeholder='Type Here...'
-		    		onSubmitEditing={Keyboard.dismiss}
-                	>
-			</SearchBar>
-                </KeyboardAvoidingView>
-*/}
-                {/*Circular buttons under search bar*/}
-{/*                <KeyboardAvoidingView style={styles.buttons}
+		<View style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
                     alignItems={'center'}
@@ -193,13 +183,8 @@ class MapScreen extends Component {
                     >
                         <Text style={styles.buttonText}>{"Offices"}</Text>
                     </TouchableOpacity>
-                </KeyboardAvoidingView>
-
-*/}		{/*Adds extra spacing below buttons to appear more comfortable*/}
-{/*		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
-*/}
-		{/*Flatlist of classList, filters when you begin typing*/}
-{/*		<KeyboardAvoidingView style = {{flex:1}} behavior="padding">
+                </View>
+		<View style = {{flex:1}}>
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
 			    onPress={() => {
@@ -213,8 +198,33 @@ class MapScreen extends Component {
 			</TouchableOpacity>
 			}
 		    />
-		</KeyboardAvoidingView>
+		</View>
+        </SlidingUpPanel>
+      </View>
+
+    {/*View encasing SearchBar*/}
+    {/* <KeyboardAvoidingView  behavior="height" enabled>
+			<SearchBar
+				style={styles.searchBar}
+				containerStyle={{ backgroundColor: 'white' }}
+				inputStyle={{ backgroundColor: 'white' }}
+				ref={search => this.search = search}
+				clearIcon={{ color: 'red' }}
+				searchIcon={false}
+				onChangeText={(term) => {this.searchUpdated(term)}}
+				onClear={() => this.search.clear()}
+				placeholder='Type Here...'
+		    		onSubmitEditing={Keyboard.dismiss}
+                	>
+			</SearchBar>
+                </KeyboardAvoidingView>
 */}
+                {/*Circular buttons under search bar*/}
+{/*                */}		{/*Adds extra spacing below buttons to appear more comfortable*/}
+{/*		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
+*/}
+		{/*Flatlist of classList, filters when you begin typing*/}
+{/*		*/}
             </Container>
         );
 
@@ -230,6 +240,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    slideBar: {
+	backgroundColor:'white',
+    },
     buttonText: {
         textAlign: 'center',
         color: 'white',
@@ -239,7 +252,8 @@ const styles = StyleSheet.create({
     buttonList: {
         borderWidth: 1,
         padding: 10,
-        borderColor: 'black'
+        borderColor: 'black',
+	backgroundColor: 'white'
     },
     listText: {
         textAlign: 'left',
@@ -265,6 +279,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#555"
     },
     buttons: {
+	backgroundColor: 'white',
         paddingVertical: 10,
     }
 })
