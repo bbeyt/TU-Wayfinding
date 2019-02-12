@@ -75,9 +75,9 @@ class MapScreen extends Component {
         const filteredTerms = classList.filter(createFilter(this.state.searchTerm, keys))
         return (
             <Container>
-           {/*     <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
+                <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
                     <Left>
-                        <Button transparent>
+                        <Button title = "menu" transparent>
                             <Icon name="menu" onPress={() =>
                                 this.props.navigation.openDrawer()} />
                         </Button>
@@ -85,9 +85,9 @@ class MapScreen extends Component {
                     <Body />
                     <Right />
                 </Header>
-*/}
+
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
-{/*                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
+                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
 			style={{ flex: 1 }}
 			initialRegion={{
@@ -131,15 +131,18 @@ class MapScreen extends Component {
 			/>
 		</MapView>
 		</ScrollView>
-*/}
+
       <View style={styles.container}>
         <Button title='Show panel' onPress={() => this.setState({visible: true})} />
-        <SlidingUpPanel
+       
+	 <SlidingUpPanel
           visible={this.state.visible}
           draggableRange = {{top:4*height/5, bottom:0}}
 	  startCollapsed = {false}
 	  onRequestClose={() => this.setState({visible: false})}>
             <Button title='Hide' onPress={() => this.setState({visible: false})} />
+
+    {/*View encasing SearchBar*/}
 		<SearchBar
           		style={styles.searchBar}
                         containerStyle={{ backgroundColor: 'white' }}
@@ -153,6 +156,7 @@ class MapScreen extends Component {
                         onSubmitEditing={Keyboard.dismiss}
                  ></SearchBar>
 
+                {/*Circular buttons under search bar*/}
 		<View style={styles.buttons}
                     flexDirection={'row'}
                     justifyContent={'space-evenly'}
@@ -184,6 +188,8 @@ class MapScreen extends Component {
                         <Text style={styles.buttonText}>{"Offices"}</Text>
                     </TouchableOpacity>
                 </View>
+
+		{/*Flatlist of classList, filters when you begin typing*/}
 		<View style = {{flex:1}}>
 		    <FlatList data= {filteredTerms} renderItem = {({item}) => 
 			<TouchableOpacity style= {styles.buttonList}
@@ -198,33 +204,9 @@ class MapScreen extends Component {
 			</TouchableOpacity>
 			}
 		    />
-		</View>
-        </SlidingUpPanel>
-      </View>
-
-    {/*View encasing SearchBar*/}
-    {/* <KeyboardAvoidingView  behavior="height" enabled>
-			<SearchBar
-				style={styles.searchBar}
-				containerStyle={{ backgroundColor: 'white' }}
-				inputStyle={{ backgroundColor: 'white' }}
-				ref={search => this.search = search}
-				clearIcon={{ color: 'red' }}
-				searchIcon={false}
-				onChangeText={(term) => {this.searchUpdated(term)}}
-				onClear={() => this.search.clear()}
-				placeholder='Type Here...'
-		    		onSubmitEditing={Keyboard.dismiss}
-                	>
-			</SearchBar>
-                </KeyboardAvoidingView>
-*/}
-                {/*Circular buttons under search bar*/}
-{/*                */}		{/*Adds extra spacing below buttons to appear more comfortable*/}
-{/*		<KeyboardAvoidingView style={{flex:0.01}} behavior="position"/>
-*/}
-		{/*Flatlist of classList, filters when you begin typing*/}
-{/*		*/}
+		  </View>
+            </SlidingUpPanel>
+     	 </View>
             </Container>
         );
 
