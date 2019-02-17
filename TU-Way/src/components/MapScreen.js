@@ -87,9 +87,10 @@ class MapScreen extends Component {
                 </Header>
 
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
-                <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
+            <View style={styles.container}>
+              <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 		<MapView 
-			style={{ flex: 1 }}
+			style={{ width:width, flex:1 }}
 			initialRegion={{
 				latitude: 29.461144,
 				longitude: -98.483166,
@@ -129,16 +130,20 @@ class MapScreen extends Component {
 					console.log("${errorMessage}");
 				}}
 			/>
-		</MapView>
-		</ScrollView>
+			
+		 <TouchableOpacity
+                        style={styles.searchButton}
+                        onPress={() => this.setState({visible:true})}
+                    >
+                        <Text style={styles.buttonText}>{"Search"}</Text>
+                    </TouchableOpacity>
+              </MapView>
+ </ScrollView>
 
-      <View style={styles.container}>
-        <Button title='Show panel' onPress={() => this.setState({visible: true})} />
-       
+      
 	 <SlidingUpPanel
           visible={this.state.visible}
-          draggableRange = {{top:4*height/5, bottom:0}}
-	  startCollapsed = {false}
+          draggableRange = {{top:2*height/3, bottom:0}}
 	  onRequestClose={() => this.setState({visible: false})}>
             <Button title='Hide' onPress={() => this.setState({visible: false})} />
 
@@ -218,7 +223,6 @@ export default MapScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-	backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontSize: width / 30,
-        zIndex: 10,
+        zIndex: 1,
     },
     buttonList: {
         borderWidth: 1,
@@ -250,6 +254,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'maroon',
         justifyContent: 'center',
         zIndex: 10,
+    },
+    searchButton:{
+	width: width / 5,
+        height: width / 5,
+        borderRadius: width / 10,
+        backgroundColor: 'maroon',
+        justifyContent: 'center',
+        zIndex: 10,
+	marginLeft:width-120,
+	marginTop:height-200
+
     },
     searchBar: {
         position: 'absolute',
