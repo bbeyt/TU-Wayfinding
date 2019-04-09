@@ -10,7 +10,11 @@ import nameToCode from './NameRef.json';
 import codeToCoords from './CoordRef.json';
 import buildingsList from './Buildings.json';
 import officesList from './Offices.json';
+import classList from '../../classList.json';
 import sampleClasses from './SampleClasses.json';
+import server from '../../server.js';
+
+const http = require('http');
 
 //Get height and width of screen
 const { height, width } = Dimensions.get('window');
@@ -63,7 +67,7 @@ class MapScreen extends Component {
         this.state = { 
             searchTerm: '',
             searchType: '',
-            searchList: buildingsList.concat(officesList, sampleClasses),
+            searchList: buildingsList.concat(officesList, classList),
             origin: '',
             destination: '',
             location: {},
@@ -72,7 +76,52 @@ class MapScreen extends Component {
     }
 
     componentDidMount() {
-        //TODO: Get class list from mock database and add to searchList
+        axios.get("http://localhost:8081")
+            .then((res) => {
+                //Parser for raw ics data to get events into search list
+                const lines = res.data.split("\n");
+                let events = [];
+                let date = '';
+                let key = '';
+                let location = '';
+                let previousKey = '';
+                for (i = 0; i < lines.length; i++) {
+                    if (lines[i].includes('Course:')) {
+                        date = lines[i].split(":")[1].trim();
+                    }
+                    else if (lines[i].includes('Building:')) {
+                        key = lines[i].split(":")[1].trim().replace("\\", "");
+                    }
+                    else if (lines[i].includes('Room:')) {
+                        key = lines[i].split(":")[1].trim().replace("\\", "");
+                    }                   
+                    else if (lines[i].includes('Date:')) {
+                        location = lines[i].split(":")[1].split('\\')[0];
+                    }
+                    else if (lines[i].includes('Time:')) {
+                        if (key === '' || date === '' || location === '') {
+                            console.log("Warning: Upcoming event field not found.");
+                        }
+                        if (previousKey != key) {
+                            events.push({
+                                key: key,
+                                date: date,
+                                location: location,
+                                type: 'event'
+                            });
+                            previousKey = key;
+                        }
+                        key = '';
+                        date = '';
+                        location = '';
+                    }
+                }
+                this.setState(prevState => (
+                    { 
+                        searchList: prevState.searchList.concat(events),
+                    }
+                ))
+                })
         axios.get("http://25livepub.collegenet.com/calendars/publisher-calendar-tulife.ics")
             .then((res) => {
                 //Parser for raw ics data to get events into search list
