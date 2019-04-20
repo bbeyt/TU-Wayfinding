@@ -190,11 +190,17 @@ class MapScreen extends Component {
                 <Container style= {{
                     backgroundColor: "#723130",
                     flex: this.state.destination ? 0.2 : 0.001,
-                    paddingLeft: "5%"
+                    paddingLeft: "5%",
+                    flexDirection: "row",
                 }}>
                     <Text style= {styles.navtext}>
                         { this.state.destination ? "Navigating to " + this.state.destination : "" }
                     </Text>
+                    <Button transparent>
+                        <Icon name="close" onPress={() =>
+                            this.setState({ destination: '' })
+                        }/>
+                    </Button>
                 </Container>
 		{/*ScrollView used to dismiss keyboard when tapping outside of text box or keyboard*/}
                 <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>

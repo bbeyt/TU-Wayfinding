@@ -1,12 +1,12 @@
 [
     {
         "key": "Office of Campus and Community Involvement",
-        "location": "Campus and Community Involvement",
+        "location": "Office of Campus and Community Involvement",
         "type": "office" 
     },
     {
         "key": "Office of Financial Services",
-        "location": "Financial Services",
+        "location": "Office of Financial Services",
         "type": "office" 
     }
 ]
