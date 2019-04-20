@@ -7,7 +7,6 @@ import SearchInput, { createFilter } from 'react-native-search-filter';
 import MapViewDirections from 'react-native-maps-directions';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 
-
 //Get height and width of screen
 var { height, width } = Dimensions.get('window');
 
@@ -77,10 +76,9 @@ class MapScreen extends Component {
             <Container>
                 <Header androidStatusBarColor={"#723130"} style={{ backgroundColor: "#723130" }}>
                     <Left>
-                        <Button title = "menu" transparent>
-                            <Icon name="menu" onPress={() =>
-                                this.props.navigation.openDrawer()} />
-                        </Button>
+                        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} transparent>
+                            <Icon style={{color: "white"}} name="menu"/>
+                        </TouchableOpacity>
                     </Left>
                     <Body />
                     <Right />
@@ -130,14 +128,13 @@ class MapScreen extends Component {
 					console.log("${errorMessage}");
 				}}
 			/>
-			
-		 <TouchableOpacity
+            </MapView>
+            <TouchableOpacity
                         style={styles.searchButton}
                         onPress={() => this.setState({visible:true})}
                     >
                         <Text style={styles.buttonText}>{"Search"}</Text>
-                    </TouchableOpacity>
-              </MapView>
+            </TouchableOpacity>
  </ScrollView>
 
       
@@ -210,9 +207,9 @@ class MapScreen extends Component {
 			}
 		    />
 		  </View>
-            </SlidingUpPanel>
+        </SlidingUpPanel>
      	 </View>
-            </Container>
+        </Container>
         );
 
     }
@@ -251,20 +248,20 @@ const styles = StyleSheet.create({
         width: width / 5,
         height: width / 5,
         borderRadius: width / 10,
-        backgroundColor: 'maroon',
+        backgroundColor: '#723130',
         justifyContent: 'center',
         zIndex: 10,
     },
     searchButton:{
-	width: width / 5,
+        position: 'absolute',
+	    width: width / 5,
         height: width / 5,
         borderRadius: width / 10,
-        backgroundColor: 'maroon',
+        backgroundColor: '#723130',
         justifyContent: 'center',
         zIndex: 10,
-	marginLeft:width-120,
-	marginTop:height-200
-
+	    left:width-120,
+	    top:height-200
     },
     searchBar: {
         position: 'absolute',
