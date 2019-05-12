@@ -1,77 +1,77 @@
 [
     {
         "key": "Mabee Dining Hall",
-        "location": "Mabee",
+        "location": "Mabee Dining Hall",
         "type": "building" 
     },
     {
         "key": "William Bell Athletics Center",
-        "location": "WBC",
+        "location": "William Bell Athletics Center",
         "type": "building" 
     },
     {
         "key": "Coates University Center",
-        "location": "COAT",
+        "location": "Coates University Center",
         "type": "building" 
     },
     {
         "key": "Witt Reception Center",
-        "location": "WTCR",
+        "location": "Witt Reception Center",
         "type": "building" 
     },
     {
         "key": "Northrup Hall",
-        "location": "NH",
+        "location": "Northrup Hall",
         "type": "building" 
     },
     {
         "key": "Trinity Tower",
-        "location": "Tower",
+        "location": "Trinity Tower",
         "type": "building" 
     },
     {
         "key": "Margarite B. Parker Chapel",
-        "location": "MPC",
+        "location": "Margarite B. Parker Chapel",
         "type": "building" 
     },
     {
         "key": "Storch Memorial Building",
-        "location": "SML",
+        "location": "Storch Memorial Building",
         "type": "building" 
     },
     {
         "key": "Ruth Taylor Theater",
-        "location": "RTT",
+        "location": "Ruth Taylor Theater",
         "type": "building" 
     },
     {
         "key": "Dicke Art/Smith Music Building",
-        "location": "DSB",
+        "location": "Dicke Art/Smith Music Building",
         "type": "building" 
     },
     {
         "key": "Laurie Auditorium",
-        "location": "LA",
+        "location": "Laurie Auditorium",
         "type": "building" 
     },
     {
         "key": "Coates Library",
-        "location": "EHCL",
+        "location": "Coates Library",
         "type": "building" 
     },
     {
         "key": "Halsell Administrative Studies",
-        "location": "HAS",
+        "location": "Halsell Administrative Studies",
         "type": "building" 
     },
     {
         "key": "Chapman Center",
-        "location": "CGC",
+        "location": "Chapman Center",
         "type": "building" 
     },
     {
         "key": "Center for Science and Innovation",
-        "location": "CSI",
+        "location": "Center for Science and Innovation",
         "type": "building" 
     }
 ]
