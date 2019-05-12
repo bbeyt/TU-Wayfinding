@@ -5,9 +5,16 @@ const mysql = require('mysql');
 const dbConfig = require('./databaseConfig.js');
 const url = require('url');
 const app = express();
+
+
 app.use(bodyParser.json());
 
 const upload = multer({ dest: 'tmp/uploads/' })
+const ngrok = require('ngrok');
+(async function() {
+  const url = await ngrok.connect();
+})();
+const api = ngrok.getApi();
 
 const connection = mysql.createConnection({
     host     : dbConfig.host,
